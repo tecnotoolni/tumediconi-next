@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Raleway, Roboto } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
+import ToastProvider from "@/components/common/ToastProvider";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -25,9 +26,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${raleway.variable} ${roboto.variable} antialiased min-h-dvh flex justify-center items-center`}
+        className={`${raleway.variable} ${roboto.variable} antialiased flex justify-center items-center min-h-dvh`}
       >
         {children}
+        <ToastProvider />
       </body>
     </html>
   );
