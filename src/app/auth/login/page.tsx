@@ -2,29 +2,59 @@
 import SiteIdentifierTitle from "@/components/common/SiteIdentifier";
 import Button from "@/components/common/ui/Button";
 import TextInput from "@/components/common/ui/TextInput";
-import { login } from "@/lib/auth";
 import es from "@/sources/lang.es";
+import routes from "@/sources/routes";
+import { UseAuthStore } from "@/store/useAuthStore";
+import { ApiResponse } from "@/types/ApiResponse";
+import { User } from "@/types/User";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { FiLogIn } from "react-icons/fi";
 
 export default function AuthLogin() {
+  const { setUser, user } = UseAuthStore();
+
+  const saveUser = (user: User) => {
+    setUser(user);
+  }
+  
+  useEffect(() => {
+    console.log("User data updated:", user);
+  }, [user]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+    event.preventDefault();
+    
+    try {
+      toast.loading("Iniciando sesión...");
+
+      const formData = new FormData(event.currentTarget);
+      const identifier = formData.get('identifier') as string;
+      const password = formData.get('password') as string;
+
+      const res = await fetch(routes.api.client.login, {
+          method: 'POST',
+          body: JSON.stringify({ identifier, password }),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        
+      const meta = await res.json() as ApiResponse<{token: string, user: User}>;
       
-      try {
-        const formData = new FormData(event.currentTarget);
-        const identifier = formData.get('identifier') as string;
-        const password = formData.get('password') as string;
-  
-        const { user } = await login({identifier, password});
-        
-        console.log("Usuario autenticado:", user);
-        
-      } catch (error) {
-        toast.error("Error al iniciar sesión:" + error );
+      saveUser(meta.data.user);
+      
+      if (!meta.success) {
+        throw new Error(meta.error?.message);
       }
+      
+
+      toast.success(`Se ha iniciado sesión correctamente, bienvenido: ${meta.data.user.username}`);
+
+    } catch (error: unknown) {
+      console.error(error);
+      toast.error(getErrorMessage(error));
     }
+  }
 
     return (
         <main className="flex justify-center items-center size-full">

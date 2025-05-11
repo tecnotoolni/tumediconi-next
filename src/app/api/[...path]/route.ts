@@ -1,13 +1,6 @@
-/*
-  Esta es una funcion para controlar de forma dinamica las peticiones a la API.
-  Se utiliza de forma genérica como proxy, es decir, que las acciones que se realicen en esta función,
-  serán replicadas en la API del backend.
-  
-  También con segunda intención, se maneja el token de autenticación del usuario.
-*/
-
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserToken } from '@/lib/auth';
+import { cookies } from 'next/headers';
 
 export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
   const token = await getUserToken();
@@ -39,6 +32,7 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
 }
 
 export async function POST(request: NextRequest, { params }: { params: { path: string[] } }) {
+  const token = await getUserToken();
   const fullPath = params.path.join('/');
   const targetUrl = `${process.env.API_URL}/${fullPath}`;
   const body = await request.text();
@@ -46,6 +40,7 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
   const backendRes = await fetch(targetUrl, {
     method: 'POST',
     headers: {
+      Authorization: `Bearer ${token}`,
       'Content-Type': request.headers.get('content-type') || 'application/json',
     },
     body,
@@ -53,10 +48,24 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
 
   const res = await backendRes.json();
 
+  console.log(res)
+
+  if (fullPath === 'auth/login' && backendRes.ok && res?.data?.token) {
+    const cookieStore = await cookies();
+  
+    cookieStore.set('token', res.data.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 60 * 60 * 24,
+    });
+  }
+
   return NextResponse.json(res);
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { path: string[] } }) {
+  const token = await getUserToken();
   const fullPath = params.path.join('/');
   const targetUrl = `${process.env.API_URL}/${fullPath}`;
   const body = await request.text();
@@ -64,6 +73,7 @@ export async function PUT(request: NextRequest, { params }: { params: { path: st
   const backendRes = await fetch(targetUrl, {
     method: 'PUT',
     headers: {
+      Authorization: `Bearer ${token}`,
       'Content-Type': request.headers.get('content-type') || 'application/json',
     },
     body,

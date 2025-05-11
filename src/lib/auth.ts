@@ -1,5 +1,3 @@
-"use server"
-
 /* 
   Manejo de la autenticación de usuarios en la aplicación.
   Esta función se encarga de autenticar a los usuarios mediante un token JWT.
@@ -14,6 +12,8 @@ import { cookies } from 'next/headers';
 export async function getUserToken(): Promise<string | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
+
+  console.log(token)
   return token || null;
 }
 
@@ -26,25 +26,6 @@ export async function setUserToken(token: string): Promise<void> {
     path: '/',
     maxAge: 60 * 60 * 24,
   });
-}
 
-export async function login({ identifier, password }: { identifier: string; password: string }) {
-
-  const response = await fetch(`${process.env.API_URL}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ identifier, password }),
-  });
-
-  const result = await response.json();
-
-  if (!result.success) {
-    throw new Error(result.error.message || "Authentication failed");
-  }
-
-  setUserToken(result.data.token);
-
-  return {
-    user: result.data.user,
-  };
+  console.log("Token set:", token);
 }
