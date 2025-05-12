@@ -1,7 +1,3 @@
-enum Status {
-    new = "new",
-    modified = "modified",
-    deleted = "deleted",
-}
+type Status = "active" | "disabled" | "modified"| "deleted";
 
 export default Status;

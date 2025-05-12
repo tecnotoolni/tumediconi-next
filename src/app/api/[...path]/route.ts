@@ -7,6 +7,8 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
   const fullPath = params.path.join('/');
   const targetUrl = `${process.env.API_URL}/${fullPath}`;
 
+  console.log(targetUrl)
+
   const backendRes = await fetch(targetUrl, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -35,7 +37,6 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
   const token = await getUserToken();
   const fullPath = params.path.join('/');
   const targetUrl = `${process.env.API_URL}/${fullPath}`;
-  const body = await request.text();
 
   const backendRes = await fetch(targetUrl, {
     method: 'POST',
@@ -43,9 +44,10 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
       Authorization: `Bearer ${token}`,
       'Content-Type': request.headers.get('content-type') || 'application/json',
     },
-    body,
-  });
-
+    body: request.body,
+    duplex: 'half',
+  }); 
+  
   const res = await backendRes.json();
 
   console.log(res)

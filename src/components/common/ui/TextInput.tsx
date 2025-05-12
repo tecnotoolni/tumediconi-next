@@ -6,22 +6,26 @@ interface Props {
     name: string;
     value?: string;
     onChange?: (value: string) => void;
-    placeholder?: string | undefined
+    placeholder?: string;
     type?: "text" | "email" | "password";
+    error?: string | null;
+    disabled?: boolean;
 }
 
-export default function TextInput({ label, name, value, onChange, placeholder, type = "text"}: Props) {
+export default function TextInput({ label, name, value, onChange, placeholder, type, error, disabled }: Props) {
   return (
     <div className="flex flex-col gap-1">
         <label className="text-gray-600 leading-tight font-medium" htmlFor={name}>{label}</label>
         <input
             name={name}
-            type={type}
+            type={type || "text"}
             value={value}
+            disabled={disabled}
             onChange={(e: ChangeEvent<HTMLInputElement>) => onChange && onChange(e.target.value)}
             placeholder={placeholder}
-            className="p-2 bg-shades-100 border border-cool-gray-100 text-gray-700 rounded-lg"
+            className={`p-2 bg-shades-100 border disabled:bg-cool-gray-100 disabled:opacity-20 ${error ? 'border-red-200 bg-red-100 text-red-600' : 'border-cool-gray-100'} text-gray-700 rounded-lg`}
         />
-    </div>    
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+    </div>
   );
 }

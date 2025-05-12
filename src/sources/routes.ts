@@ -1,11 +1,20 @@
 const routes = {
     root: "/",
     dashboard: "/dashboard",
-    login: "/auth/login",
-    register: "/auth/register",
+    authentication: {
+        login: "/auth/login",
+        register: "/auth/register",
+        finish: "/auth/finish",
+    },
     api: {
+        base: "/api",
         client: {
             login: "/api/auth/login",
+            register: "/api/auth/register",
+            file: {
+                uploadFile: "/api/files/upload",
+                uploads: "/api/uploads",
+            }
         }
     }
 }

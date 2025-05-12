@@ -1,6 +1,8 @@
 import { IconType } from 'react-icons';
 
 interface Props {
+    className?: string;
+    disabled?: boolean;
     color: "red" | "gray" | "blue";
     label: string;
     onClick?: () => void;
@@ -8,17 +10,17 @@ interface Props {
     type: "button" | "submit" | "reset";
 }
 
-export default function Button({ color, type, label, onClick, icon: Icon }: Props) {
+export default function Button({ className, disabled, color, type, label, onClick, icon: Icon }: Props) {
 
     const definitions = {
-        red: "text-red-200 bg-red-100 hover:bg-red-150",
+        red: "text-red-600 bg-red-100 hover:bg-red-200",
         blue: "text-primary-800 bg-primary-100 hover:bg-primary-200",
-        gray: "text-cool-gray-500 bg-cool-gray-100 hover:bg-stone-200"
+        gray: "text-cool-gray-700 bg-cool-gray-100 hover:bg-cool-gray-200"
     }
 
     return ( 
-        <button type={type} className={`${definitions[color]} p-4 active:scale-95 transition-all flex items-center gap-2 rounded-lg cursor-pointer`} onClick={onClick}>
-            {Icon && <Icon className="text-base" />}
+        <button disabled={disabled} type={type} className={`${className} ${definitions[color]} disabled:opacity-25 disabled:pointer-events-none px-3 font-medium py-2 active:scale-95 transition-all flex items-center gap-1 rounded-lg cursor-pointer`} onClick={onClick}>
+            {Icon && <Icon strokeWidth={2} className="text-base" />}
             {label}
         </button>
     );

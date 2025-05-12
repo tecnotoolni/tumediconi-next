@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User } from '@/types/User';
+import { UserAuthenticated } from '@/types/User';
 
 type AuthState = {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: UserAuthenticated | null;
+  setUser: (user: UserAuthenticated | null) => void;
 };
 
 export const UseAuthStore = create<AuthState>()(
