@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Avatar from "./Avatar";
 import Button from "./Button";
 import { TbRestore, TbUpload } from "react-icons/tb";
-import fileUploadHandler from "@/utils/fileUploadHandler";
+import fileUploadHandler from "@/lib/fileUploadHandler";
 import FileData from "@/types/FileData";
 import routes from "@/sources/routes";
 import toast from "react-hot-toast";
@@ -11,9 +11,10 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 interface Props {
     currentAvatarUrl?: string | null;
+    className?: string;
 }
 
-export default function AvatarUpload({ currentAvatarUrl }: Props) {
+export default function AvatarUpload({ currentAvatarUrl, className }: Props) {
     const [url, setAvatarURL] = useState<string | null>(currentAvatarUrl ?? null);
     const [fileUploaded, setFileUploaded] = useState<File | null>(null);
 
@@ -58,7 +59,7 @@ export default function AvatarUpload({ currentAvatarUrl }: Props) {
     };
 
     return (
-        <div className="flex flex-col items-center gap-2">
+        <div className={`flex flex-col items-center gap-2 ${className ?? ""}`}>
             <input type="hidden" name="avatarID" value={fileData?.id ?? ""} />
             <Avatar url={url} />
             <div className="flex gap-2 items-center">

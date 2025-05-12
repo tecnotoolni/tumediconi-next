@@ -7,7 +7,7 @@ interface Props {
     value?: string;
     onChange?: (value: string) => void;
     placeholder?: string;
-    type?: "text" | "email" | "password";
+    type?: "text" | "email" | "password" | "number" | "date";
     error?: string | null;
     disabled?: boolean;
 }
@@ -23,7 +23,7 @@ export default function TextInput({ label, name, value, onChange, placeholder, t
             disabled={disabled}
             onChange={(e: ChangeEvent<HTMLInputElement>) => onChange && onChange(e.target.value)}
             placeholder={placeholder}
-            className={`p-2 bg-shades-100 border disabled:bg-cool-gray-100 disabled:opacity-20 ${error ? 'border-red-200 bg-red-100 text-red-600' : 'border-cool-gray-100'} text-gray-700 rounded-lg`}
+            className={`p-1.5 bg-shades-100 border disabled:bg-cool-gray-100 disabled:opacity-20 ${error ? 'border-red-200 bg-red-100 text-red-600' : 'border-cool-gray-100'} text-gray-700 rounded-lg`}
         />
         {error && <p className="text-red-600 text-sm">{error}</p>}
     </div>

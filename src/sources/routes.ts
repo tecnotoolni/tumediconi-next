@@ -14,6 +14,9 @@ const routes = {
             file: {
                 uploadFile: "/api/files/upload",
                 uploads: "/api/uploads",
+            },
+            metadata: {
+                all: "/api/metadata/all"
             }
         }
     }

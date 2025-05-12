@@ -20,6 +20,11 @@ const es = {
         loading: {
             image: "Se está subiendo la imagen, por favor espera un momento...",
         }
+    },
+    metadata: {
+        error: {
+            unknown: "Ha ocurrido un error al obtener los metadatos, por favor intenta nuevamente.",
+        }
     }
 }
 
