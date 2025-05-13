@@ -18,12 +18,7 @@ export default function AuthLogin() {
   const [title, setTitle] = useState(es.register.title);
   const [disabledButton, setDisabledButton] = useState(false);
   const [status, setStatus] = useState<"success" | "error" | null>(null);
-  const [dataError, setDataError] = useState<{
-    email: string | null;
-    username: string | null;
-    password: string | null;
-    confirmPassword: string | null;
-  }>({
+  const [dataError, setDataError] = useState({
     email: null,
     username: null,
     password: null,

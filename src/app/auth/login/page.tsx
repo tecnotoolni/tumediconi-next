@@ -8,6 +8,7 @@ import { UseAuthStore } from "@/store/useAuthStore";
 import { ApiResponse } from "@/types/ApiResponse";
 import { UserAuthenticated } from "@/types/User";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FiLogIn } from "react-icons/fi";
@@ -45,6 +46,10 @@ export default function AuthLogin() {
 
       toast.success(`Se ha iniciado sesión correctamente, bienvenido: ${meta.data.user.username}`);
       saveUser(meta.data.user);
+
+      setTimeout(() => {
+        redirect(routes.dashboard);
+      }, 2000);
 
     } catch (error: unknown) {
       setDisabledButton(false);

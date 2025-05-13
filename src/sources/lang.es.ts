@@ -25,6 +25,14 @@ const es = {
         error: {
             unknown: "Ha ocurrido un error al obtener los metadatos, por favor intenta nuevamente.",
         }
+    },
+    geolocalization: {
+        error: {
+            unknown: "Ha ocurrido un error al obtener la geolocalización, por favor intenta nuevamente.",
+        },
+    },
+    others: {
+        taking_more_time: "Estamos tomando más tiempo del esperado, espera un momento...",
     }
 }
 

@@ -3,6 +3,7 @@ import Status from "./Status";
 export enum MetadataType {
     language = "language",
     specialty = "specialty",
+    business_hours = "business_hours",
 }
 
 export interface Metadata {

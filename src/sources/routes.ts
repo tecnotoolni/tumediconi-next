@@ -17,6 +17,12 @@ const routes = {
             },
             metadata: {
                 all: "/api/metadata/all"
+            },
+            geolocalization: {
+                countries: {
+                    all: "/api/geolocalization/country/all",
+                    state: "/state/all"
+                }
             }
         }
     }

@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function SelectInput({ label, name, options, onChange, value, error, disabled }: Props) {
-  const [selectedValue, setSelectedValue] = useState<string>(value || options[0].value);
+  const [selectedValue, setSelectedValue] = useState<string | null>(value || null);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value;
@@ -32,7 +32,7 @@ export default function SelectInput({ label, name, options, onChange, value, err
         <label className="text-gray-600 leading-tight font-medium" htmlFor={name}>{label}</label>
         <select
         name={name}
-        value={selectedValue}
+        value={selectedValue || ""}
         onChange={handleChange}
         disabled={disabled}
         className={`p-2 border rounded-lg bg-shades-100 text-gray-700 ${error ? 'border-red-200 bg-red-100 text-red-600' : 'border-cool-gray-200'} ${disabled ? 'bg-cool-gray-100 opacity-50' : ''}`}
