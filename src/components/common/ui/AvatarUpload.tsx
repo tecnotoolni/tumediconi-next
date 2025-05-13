@@ -12,9 +12,10 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 interface Props {
     currentAvatarUrl?: string | null;
     className?: string;
+    error?: string;
 }
 
-export default function AvatarUpload({ currentAvatarUrl, className }: Props) {
+export default function AvatarUpload({ currentAvatarUrl, className, error }: Props) {
     const [url, setAvatarURL] = useState<string | null>(currentAvatarUrl ?? null);
     const [fileUploaded, setFileUploaded] = useState<File | null>(null);
 
@@ -79,6 +80,7 @@ export default function AvatarUpload({ currentAvatarUrl, className }: Props) {
                     icon={TbRestore}
                 />
             </div>
+            {error && <p className="text-red-600 text-sm">{error}</p>}
             <input
                 ref={fileInputRef}
                 type="file"

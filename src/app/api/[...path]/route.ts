@@ -7,8 +7,6 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
   const fullPath = params.path.join('/');
   const targetUrl = `${process.env.API_URL}/${fullPath}`;
 
-  console.log(targetUrl)
-
   const backendRes = await fetch(targetUrl, {
     headers: {
       Authorization: `Bearer ${token}`,

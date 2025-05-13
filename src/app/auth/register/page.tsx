@@ -79,6 +79,7 @@ export default function AuthLogin() {
       for (const [field, { value, message }] of Object.entries(validations)) {
         if (!value) {
           setError(field, message);
+          setDisabledButton(false);
           return;
         }
       }

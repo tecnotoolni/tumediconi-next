@@ -1,5 +1,4 @@
 import es from "@/sources/lang.es";
-import routes from "@/sources/routes";
 import { ApiResponse } from "@/types/ApiResponse";
 import FileData from "@/types/FileData";
 
@@ -8,8 +7,6 @@ interface Props {
     name?: string;
     description?: string;
 }
-
-const context = routes.api.client.file;
 
 export default async function fileUploadHandler({file, name, description}: Props) {
 
@@ -23,7 +20,7 @@ export default async function fileUploadHandler({file, name, description}: Props
     if (description) formData.append("description", description);
 
 
-    const response = await fetch(context.uploadFile, {
+    const response = await fetch("/api/files/upload", {
         method: "POST",
         body: formData,
     });

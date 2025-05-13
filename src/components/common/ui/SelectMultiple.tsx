@@ -100,16 +100,13 @@ export default function SelectMultiple({
   return (
     <div ref={containerRef} className="relative flex flex-col gap-1">
       <span className="text-gray-600 leading-tight font-medium">{label}</span>
-      {error && (
-        <span className="text-red-500 text-sm font-medium">{error}</span>
-      )}
       <ul onClick={() => { setShowOptions(!showOptions) }} onKeyDown={handleKeyDown} role="button" tabIndex={0}
-        className={`relative border border-cool-gray-100 w-full flex-1 rounded-lg flex flex-wrap gap-2 py-2 pl-2 pr-8 ${
-          error ? "border-red-500" : "border-primary-150"
+        className={`relative border w-full flex-1 rounded-lg flex flex-wrap gap-2 py-2 pl-2 pr-8 ${
+          error ? "border-red-200 bg-red-100 text-red-600" : "border-cool-gray-100 text-cool-gray-600 "
         } ${showOptions ? "rounded-b-none" : ""}`}
       >
         {value.length === 0 && (
-          <span className="text-cool-gray-600 leading-tight pointer-events-none select-none">{placeholder}</span>
+          <span className="leading-tight pointer-events-none select-none">{placeholder}</span>
         )}
         {value.map((val) => {
           const selectedOption = options.find((option) => option.value === val);
@@ -117,7 +114,7 @@ export default function SelectMultiple({
           return (
             <li
               key={val}
-              className="flex items-center z-30 cursor-default border border-cool-gray-100 rounded-sm"
+              className="flex items-center z-30 cursor-default border bg-white border-cool-gray-100 rounded-sm"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -149,7 +146,7 @@ export default function SelectMultiple({
         </div>
       </ul>
       <div
-        className={`absolute top-full transition-all z-40 border-t-0 border-cool-gray-200 bg-white w-full flex flex-col border border-primary-150 rounded-b-md  overflow-auto ${
+        className={`absolute ${error ? "top-[calc(100%-24px)]" : "top-full"} transition-all z-40 border-t-0 border-cool-gray-200 bg-white w-full flex flex-col border border-primary-150 rounded-b-md  overflow-auto ${
           showOptions ? "max-h-60" : "opacity-0 max-h-0"
         }`}
       >
@@ -171,6 +168,7 @@ export default function SelectMultiple({
           <ButtonOption key={option.value} option={option} />
         ))}
       </div>
+      {error && <p className="text-red-600 text-sm">{error}</p>}
       <select
         multiple
         required={required}

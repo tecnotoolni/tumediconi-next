@@ -1,3 +1,5 @@
+import { KeyWithStringValue } from "./KeyWithStringValue";
+
 export interface ApiResponse<T = null> {
     status: number,
     success: boolean;
@@ -5,7 +7,7 @@ export interface ApiResponse<T = null> {
     data: T;
     error: {
         message: string;
-        details?: never;
+        issues?: KeyWithStringValue
     } | null;
 }
   

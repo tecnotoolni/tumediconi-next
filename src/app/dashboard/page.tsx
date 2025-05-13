@@ -22,9 +22,9 @@ export default function Dashboard() {
 
         if (!isAdmin && (isDoctorWithoutProfile || isPatientWithoutProfile)) {
             redirect(routes.authentication.finish);
-            setStart(true)
         }
 
+        setStart(true)
     }, [user]);
 
 

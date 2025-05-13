@@ -10,12 +10,10 @@ import { getMetadataByType } from "@/lib/metadataServiceHandler"
 import { MetadataType } from "@/types/Metadata"
 import { getCountries, getMunicipaltyByStateCode, getStatesByCountryCode } from "@/lib/geolocalizationHandler"
 import { genderOptions } from "@/sources/options"
-
+import { KeyWithStringValue } from "@/types/KeyWithStringValue"
 interface Props {
     onLoadingChange?: (isLoading: boolean) => void;
-    fieldError?: {
-        [key: string]: string;
-    }
+    fieldError?: KeyWithStringValue
 }
 
 export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
@@ -39,7 +37,7 @@ export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
     const [selectedLanguage, setSelectedLanguages] = useState<string[]>([]);
     const [selectedBusinessHours, setSelectedBusinessHours] = useState<string[]>([]);
 
-    const [fieldsError, setFieldsError] = useState<{[key: string] : string}>({}) 
+    const [fieldsError, setFieldsError] = useState<KeyWithStringValue>({}) 
     
     const [data, setData] = useState<{[key: string] : string}>({})
     const setDynamicData = (field: string, value: string) => {
@@ -133,7 +131,7 @@ export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
                     <VisualSelect inline name="gender" options={genderOptions} />
                     <div className="grid grid-cols-2 gap-4">
                       <TextInput error={fieldsError?.activeSince} type="date" label="Activo Desde" name="activeSince" />
-                      <SelectInput error={fieldsError?.specialty} label="Especialidad" options={options.specialties} name="specialty" />
+                      <SelectInput error={fieldsError?.specialty} label="Especialidad" options={options.specialties} name="specialtyID" />
                     </div>
                 </div>
                 </div>
@@ -146,7 +144,7 @@ export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
                     <SelectInput error={fieldsError?.stateID} onChange={(value) => { setDynamicData("state", value)}} label="Departamento" options={options.states} name="stateID" disabled={options.states.length === 0} />
                     </div>
                     <SelectInput error={fieldsError?.municipaltyID} onChange={(value) => { setDynamicData("municipality", value)}} label="Municipio" options={options.municipalities} name="municipaltyID" disabled={options.municipalities.length === 0} />
-                    <TextAreaInput error={fieldsError?.aproximateAddress} label="Direccion Aproximada" name="location" />
+                    <TextAreaInput error={fieldsError?.aproximateAddress} label="Direccion Aproximada" name="aproximateAddress" />
                 </div>
                 </div>
 
@@ -154,7 +152,7 @@ export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
                 <h2 className="text-2xl font-semibold text-primary-700 mb-6">Desarrollo Profesional</h2>
                 <div className="flex flex-col gap-4">
                     <SelectMultiple error={fieldsError?.languages} enableSearch name="languages" label="Idiomas" value={selectedLanguage} options={options.languages} onChange={setSelectedLanguages} placeholder="Selecciona tus idiomas" />
-                    <SelectMultiple error={fieldsError?.business_hours} enableSearch name="business_hours" label="Horarios de Atención" value={selectedBusinessHours} options={options.business_hours} onChange={setSelectedBusinessHours} placeholder="Selecciona tus horarios de atención" />
+                    <SelectMultiple error={fieldsError?.businessHours} enableSearch name="business_hours" label="Horarios de Atención" value={selectedBusinessHours} options={options.business_hours} onChange={setSelectedBusinessHours} placeholder="Selecciona tus horarios de atención" />
                 </div>
             </div>
         </>
