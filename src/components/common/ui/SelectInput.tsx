@@ -14,9 +14,11 @@ interface Props {
   value?: string;
   error?: string | null;
   disabled?: boolean;
+  placeholder?: string;
+  hidePlaceholder?: boolean;
 }
 
-export default function SelectInput({ label, name, options, onChange, value, error, disabled }: Props) {
+export default function SelectInput({ label, name, options, onChange, value, error, disabled, placeholder = "Selecciona una opción", hidePlaceholder }: Props) {
   const [selectedValue, setSelectedValue] = useState<string | null>(value || null);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -37,6 +39,7 @@ export default function SelectInput({ label, name, options, onChange, value, err
         disabled={disabled}
         className={`p-2 border rounded-lg bg-shades-100 text-gray-700 ${error ? 'border-red-200 bg-red-100 text-red-600' : 'border-cool-gray-200'} ${disabled ? 'bg-cool-gray-100 opacity-50' : ''}`}
       >
+        {!hidePlaceholder && <option value="" disabled>{placeholder}</option>}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

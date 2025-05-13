@@ -17,7 +17,7 @@ export default function ToastProvider() {
           secondary: "var(--color-white)",
         },
         className:
-          "w-full max-w-[480px] *:justify-start text-primary-400 !p-0 overflow-hidden",
+          "w-full max-w-[400px] w-full *:justify-start text-primary-400 !p-0 overflow-hidden",
       }}
     >
       {(t) => (
@@ -67,7 +67,11 @@ function ToastStyler({ message, type }: { message: Renderable, type: ToastType }
   }
 
   if (type == "custom" ){ 
-    return message;
+    return (
+      <div className="flex items-center p-2 rounded-lg">
+        {message}
+      </div>
+    );
   } 
 
   const { icon: Icon, color, border } = typeProvider[type];

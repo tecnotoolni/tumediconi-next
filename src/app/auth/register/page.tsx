@@ -13,17 +13,13 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { User } from "@/types/User";
 import { redirect } from "next/navigation";
 import routes from "@/sources/routes";
+import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 
 export default function AuthLogin() {
   const [title, setTitle] = useState(es.register.title);
   const [disabledButton, setDisabledButton] = useState(false);
   const [status, setStatus] = useState<"success" | "error" | null>(null);
-  const [dataError, setDataError] = useState({
-    email: null,
-    username: null,
-    password: null,
-    confirmPassword: null,
-  });
+  const [dataError, setDataError] = useState<KeyWithStringValue | undefined>({});
 
   const options = [
     {
@@ -56,6 +52,7 @@ export default function AuthLogin() {
       const confirmPassword = formData.get("confirm-password") as string;
       const role = formData.get("role") as string;
       setDisabledButton(true);
+      setDataError({})
 
       const validations = {
         email: {
@@ -107,7 +104,7 @@ export default function AuthLogin() {
 
       setTimeout(() => {
         redirect(routes.authentication.login);
-      });
+      }, 3000);
 
       setTitle(es.register.success.title);
       setStatus("success");
@@ -134,23 +131,23 @@ export default function AuthLogin() {
                 options={options}
               />
               <TextInput
-                error={dataError.email}
+                error={dataError?.email}
                 label="Correo Electrónico"
                 name="email"
               />
               <TextInput
-                error={dataError.username}
+                error={dataError?.username}
                 label="Nombre de Usuario"
                 name="username"
               />
               <TextInput
-                error={dataError.password}
+                error={dataError?.password}
                 type="password"
                 label="Contraseña"
                 name="password"
               />
               <TextInput
-                error={dataError.confirmPassword}
+                error={dataError?.confirmPassword}
                 type="password"
                 label="Confirmar Contraseña"
                 name="confirm-password"

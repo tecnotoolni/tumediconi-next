@@ -55,6 +55,11 @@ export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
 
     useEffect(() => {
         const fetchStatesByCountry = async () => {
+
+          if(!data.country) {
+            return;
+          }
+
           const states = await getStatesByCountryCode(data.country);
           const options = convertToOptionsFromStates(states.data);
           
@@ -66,6 +71,11 @@ export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
   
       useEffect(() => {
         const fetchMunicipaltiesByState = async () => {
+
+          if(!data.state || !data.country) {
+            return;
+          }
+
           const municipalities = await getMunicipaltyByStateCode(data.state, data.country);
           const options = convertToOptionsFromMunicipalities(municipalities.data);
           
@@ -140,7 +150,7 @@ export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
                 <h2 className="text-2xl font-semibold text-primary-700 mb-6">Localización</h2>
                 <div className="flex flex-col gap-4">
                     <div className="grid grid-cols-2 gap-4">
-                    <SelectInput error={fieldsError?.countryID} onChange={(value) => { setDynamicData("country", value)}} label="Pais" options={options.countries} name="countryID" disabled />
+                    <SelectInput hidePlaceholder error={fieldsError?.countryID} onChange={(value) => { setDynamicData("country", value)}} label="Pais" options={options.countries} name="countryID" disabled />
                     <SelectInput error={fieldsError?.stateID} onChange={(value) => { setDynamicData("state", value)}} label="Departamento" options={options.states} name="stateID" disabled={options.states.length === 0} />
                     </div>
                     <SelectInput error={fieldsError?.municipaltyID} onChange={(value) => { setDynamicData("municipality", value)}} label="Municipio" options={options.municipalities} name="municipaltyID" disabled={options.municipalities.length === 0} />

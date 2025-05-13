@@ -13,9 +13,10 @@ interface Props {
     currentAvatarUrl?: string | null;
     className?: string;
     error?: string;
+    setAvatarData?: (fileData: FileData | null) => void;
 }
 
-export default function AvatarUpload({ currentAvatarUrl, className, error }: Props) {
+export default function AvatarUpload({ currentAvatarUrl, className, error, setAvatarData }: Props) {
     const [url, setAvatarURL] = useState<string | null>(currentAvatarUrl ?? null);
     const [fileUploaded, setFileUploaded] = useState<File | null>(null);
 
@@ -30,6 +31,7 @@ export default function AvatarUpload({ currentAvatarUrl, className, error }: Pro
                 const fileOnBackend = await fileUploadHandler({ file: fileUploaded });
                 setAvatarURL(`${routes.api.base}${fileOnBackend.data.fileUrl}`);
                 setfileData(fileOnBackend.data);
+                setAvatarData?.(fileOnBackend.data);
                 toast.success(es.upload.success.image);
             } catch (error) {
                 toast.success(getErrorMessage(error));
@@ -37,7 +39,7 @@ export default function AvatarUpload({ currentAvatarUrl, className, error }: Pro
         };
 
         uploadFile();
-    }, [fileUploaded]);
+    }, [fileUploaded, setAvatarData]);
 
     const handleReset = () => {
         setAvatarURL(null);

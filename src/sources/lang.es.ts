@@ -5,6 +5,10 @@ const es = {
     },
     finish_register: {
         title: "Finalizar Registro",
+        success: {
+            title: "Registro Finalizado",
+            message: "Tu registro ha finalizado correctamente, en unos segundos serás redireccionado al dashboard para continuar usando nuestros servicios."
+        }
     },
     register: {
         title: "Registrarse",
