@@ -11,18 +11,30 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 interface Props {
     currentAvatarUrl?: string | null;
+    currentAvatarId?: number | null;
     className?: string;
     error?: string;
     setAvatarData?: (fileData: FileData | null) => void;
 }
 
-export default function AvatarUpload({ currentAvatarUrl, className, error, setAvatarData }: Props) {
+export default function AvatarUpload({ currentAvatarUrl, className, error, setAvatarData, currentAvatarId }: Props) {
     const [url, setAvatarURL] = useState<string | null>(currentAvatarUrl ?? null);
     const [fileUploaded, setFileUploaded] = useState<File | null>(null);
-
-    const [fileData, setfileData] = useState<FileData | null>(null);
+    const [id, setId] = useState<number | null>(currentAvatarId ?? null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (currentAvatarUrl) {
+            setAvatarURL(currentAvatarUrl);
+        }
+    }, [currentAvatarUrl]);
+
+    useEffect(() => {
+        if (currentAvatarId) {
+            setId(currentAvatarId);
+        }
+    },[currentAvatarId]);
 
     useEffect(() => {
         const uploadFile = async () => {
@@ -30,8 +42,8 @@ export default function AvatarUpload({ currentAvatarUrl, className, error, setAv
             try {
                 const fileOnBackend = await fileUploadHandler({ file: fileUploaded });
                 setAvatarURL(`${routes.api.base}${fileOnBackend.data.fileUrl}`);
-                setfileData(fileOnBackend.data);
                 setAvatarData?.(fileOnBackend.data);
+                setId(fileOnBackend.data.id);
                 toast.success(es.upload.success.image);
             } catch (error) {
                 toast.success(getErrorMessage(error));
@@ -43,7 +55,6 @@ export default function AvatarUpload({ currentAvatarUrl, className, error, setAv
 
     const handleReset = () => {
         setAvatarURL(null);
-        setfileData(null);
         setFileUploaded(null);
     };
 
@@ -63,7 +74,7 @@ export default function AvatarUpload({ currentAvatarUrl, className, error, setAv
 
     return (
         <div className={`flex flex-col items-center gap-2 ${className ?? ""}`}>
-            <input type="hidden" name="avatarID" value={fileData?.id ?? ""} />
+            <input type="hidden" name="avatarID" value={id ?? ''} />
             <Avatar url={url} />
             <div className="flex gap-2 items-center">
                 <Button

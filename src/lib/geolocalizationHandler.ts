@@ -26,8 +26,6 @@ export async function getStatesByCountryCode(countryIsoCode: string) {
 export async function getMunicipaltyByStateCode(stateIsoCode: string, countryIsoCode: string) {
     const response = await fetch(`/api/geolocalization/country/${countryIsoCode}/state/${stateIsoCode}/municipality/all`);
 
-    console.log(response.url);
-
     if (!response.ok) {
         throw new Error(es.geolocalization.error.unknown);
     }

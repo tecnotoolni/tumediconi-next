@@ -172,7 +172,7 @@ export default function SelectMultiple({
       <select
         multiple
         required={required}
-        className="hidden"
+        className="sr-only top-full left-4"
         value={value}
         onChange={handleSelectChange}
         name={name}

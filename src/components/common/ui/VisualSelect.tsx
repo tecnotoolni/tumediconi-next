@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 
 interface Option {
@@ -12,12 +12,17 @@ interface Props {
   inline?: boolean
   label?: string;
   name: string;
+  value?: string;
   options: Option[];
   onChange?: (value: string) => void;
 }
 
-export default function VisualSelect({inline, name, label, options, onChange }: Props) {
+export default function VisualSelect({inline, name, label, options, onChange, value }: Props) {
   const [selectedValue, setSelectedValue] = useState<string>(options[0].value);
+
+  useEffect(() => {
+    setSelectedValue(value || "")
+  }, [value])
 
   const handleClick = (value: string) => {
     setSelectedValue(value);
@@ -36,7 +41,7 @@ export default function VisualSelect({inline, name, label, options, onChange }: 
             key={option.value}
             type="button"
             onClick={() => handleClick(option.value)}
-            className={`border flex items-center ${inline ? "flex-1 justify-center p-2" : "flex-col p-4"} cursor-pointer transition-all rounded-lg active:scale-95 ${selectedValue === option.value ? 'bg-primary-700 hover:bg-primary-600 text-white' : 'border-cool-gray-100 hover:bg-cool-gray-50 text-primary-700'}`}
+            className={`border flex-1 justify-center flex items-center ${inline ? "flex-1 justify-center p-2" : "flex-col p-4"} cursor-pointer transition-all rounded-lg active:scale-95 ${selectedValue === option.value ? 'bg-primary-700 hover:bg-primary-600 text-white' : 'border-cool-gray-100 hover:bg-cool-gray-50 text-primary-700'}`}
           >
             <option.icon strokeWidth={2} />
             <span className="font-light">{option.label}</span>

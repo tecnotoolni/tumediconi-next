@@ -49,6 +49,20 @@ const es = {
             title: "Doctor creado",
             message: "El doctor ha sido creado correctamente.",
         }
+    },
+    patient: {
+        error: {
+            unknown: "Ha ocurrido un error al obtener los pacientes, por favor intenta nuevamente.",
+        },
+        success: {
+            title: "Paciente creado",
+            message: "El paciente ha sido creado correctamente.",
+        }
+    },
+    contact_channel: {
+        error: {
+            post_unknown: "Ha ocurrido un error al tratar de crear un nuevo canal de contacto, por favor intenta nuevamente."
+        }
     }
 }
 

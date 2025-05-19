@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 interface Option {
   value: string;
@@ -16,10 +16,15 @@ interface Props {
   disabled?: boolean;
   placeholder?: string;
   hidePlaceholder?: boolean;
+  required?: boolean;
 }
 
-export default function SelectInput({ label, name, options, onChange, value, error, disabled, placeholder = "Selecciona una opción", hidePlaceholder }: Props) {
-  const [selectedValue, setSelectedValue] = useState<string | null>(value || null);
+export default function SelectInput({ label, name, options, onChange, value, error, disabled, placeholder = "Selecciona una opción", hidePlaceholder, required }: Props) {
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSelectedValue(value || "")
+  }, [value])
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value;
@@ -33,6 +38,7 @@ export default function SelectInput({ label, name, options, onChange, value, err
     <div className="flex flex-col gap-1">
         <label className="text-gray-600 leading-tight font-medium" htmlFor={name}>{label}</label>
         <select
+        required={required}
         name={name}
         value={selectedValue || ""}
         onChange={handleChange}

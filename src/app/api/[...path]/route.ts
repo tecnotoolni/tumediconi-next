@@ -2,16 +2,41 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUserToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
 
-export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
+interface RequestInitWithDuplex extends RequestInit {
+  duplex?: 'half';
+}
+
+async function forwardRequest(
+  method: 'GET' | 'POST' | 'PUT',
+  request: NextRequest,
+  path: string[]
+) {
   const token = await getUserToken();
-  const fullPath = params.path.join('/');
+  const fullPath = path.join('/');
   const targetUrl = `${process.env.API_URL}/${fullPath}`;
 
-  const backendRes = await fetch(targetUrl, {
+  const init: RequestInitWithDuplex = {
+    method,
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  };
+
+  if (method !== 'GET') {
+    init.headers = {
+      ...init.headers,
+      'Content-Type': request.headers.get('content-type') || 'application/json',
+    };
+    init.body = method === 'PUT' ? await request.text() : request.body;
+    init.duplex = 'half';
+  }
+
+  const backendRes = await fetch(targetUrl, init);
+  return { backendRes, fullPath };
+}
+
+export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
+  const { backendRes } = await forwardRequest('GET', request, (await params).path);
 
   const contentType = backendRes.headers.get('content-type') || 'application/octet-stream';
 
@@ -24,7 +49,6 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
   }
 
   const text = await backendRes.text();
-
   return new Response(text, {
     status: backendRes.status,
     headers: { 'Content-Type': contentType },
@@ -32,27 +56,11 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
 }
 
 export async function POST(request: NextRequest, { params }: { params: { path: string[] } }) {
-  const token = await getUserToken();
-  const fullPath = params.path.join('/');
-  const targetUrl = `${process.env.API_URL}/${fullPath}`;
-
-  const backendRes = await fetch(targetUrl, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': request.headers.get('content-type') || 'application/json',
-    },
-    body: request.body,
-    duplex: 'half',
-  }); 
-  
+  const { backendRes, fullPath } = await forwardRequest('POST', request, (await params).path);
   const res = await backendRes.json();
-
-  console.log(res)
 
   if (fullPath === 'auth/login' && backendRes.ok && res?.data?.token) {
     const cookieStore = await cookies();
-  
     cookieStore.set('token', res.data.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -65,21 +73,7 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { path: string[] } }) {
-  const token = await getUserToken();
-  const fullPath = params.path.join('/');
-  const targetUrl = `${process.env.API_URL}/${fullPath}`;
-  const body = await request.text();
-
-  const backendRes = await fetch(targetUrl, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': request.headers.get('content-type') || 'application/json',
-    },
-    body,
-  });
-
+  const { backendRes } = await forwardRequest('PUT', request, (await params).path);
   const res = await backendRes.json();
-
   return NextResponse.json(res);
 }

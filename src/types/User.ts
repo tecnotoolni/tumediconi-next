@@ -14,7 +14,8 @@ export interface User {
     createdAt: Date;
     updatedAt: Date;
     removedAt: Date | null;
-    lastLogin: Date | null;    
+    lastLogin: Date | null;
+    avatar: FileType | null;
 }
 
 export interface UserAuthenticated {

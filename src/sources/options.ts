@@ -12,3 +12,8 @@ export const genderOptions = [
         icon: TbGenderFemale
     }
 ]
+
+export const genders = {
+    male: "Masculino",
+    female: "Femenino",
+}

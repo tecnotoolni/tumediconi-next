@@ -13,7 +13,6 @@ export async function getUserToken(): Promise<string | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
 
-  console.log(token)
   return token || null;
 }
 
@@ -27,5 +26,4 @@ export async function setUserToken(token: string): Promise<void> {
     maxAge: 60 * 60 * 24,
   });
 
-  console.log("Token set:", token);
 }

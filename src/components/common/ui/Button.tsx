@@ -4,7 +4,7 @@ interface Props {
     className?: string;
     disabled?: boolean;
     color: "red" | "gray" | "blue";
-    label: string;
+    label?: string;
     onClick?: () => void;
     icon?: IconType;
     type: "button" | "submit" | "reset";
@@ -21,7 +21,7 @@ export default function Button({ className, disabled, color, type, label, onClic
     return ( 
         <button disabled={disabled} type={type} className={`${className} ${definitions[color]} disabled:opacity-25 disabled:pointer-events-none px-3 font-medium py-2 active:scale-95 transition-all flex items-center gap-1 rounded-lg cursor-pointer`} onClick={onClick}>
             {Icon && <Icon strokeWidth={2} className="text-base" />}
-            {label}
+            {label && label}
         </button>
     );
 }

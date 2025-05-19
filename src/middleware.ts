@@ -1,20 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserToken } from './lib/auth';
+import routes from './sources/routes';
 
 export async function middleware(request: NextRequest) {
   const token = await getUserToken();
   const { pathname } = request.nextUrl;
 
-  const publicAuthRoutes = ['/auth/login', '/auth/register'];
+  const publicAuthRoutes = [routes.authentication.login, routes.authentication.register];
+  const protectedRoutes = [routes.dashboard, routes.authentication.finish];
 
   if (token && publicAuthRoutes.includes(pathname)) {
-    NextResponse.rewrite(new URL('/dashboard', request.url));
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return NextResponse.redirect(new URL(routes.dashboard, request.url));
+  }
+
+  if (!token && protectedRoutes.includes(pathname)) {
+    return NextResponse.redirect(new URL(routes.authentication.login, request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/auth/login', '/auth/register'],
+  matcher: [
+    '/authentication/login',
+    '/authentication/register',
+    '/dashboard',
+    '/authentication/finish',
+  ],
 };

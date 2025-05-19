@@ -77,7 +77,7 @@ function ToastStyler({ message, type }: { message: Renderable, type: ToastType }
   const { icon: Icon, color, border } = typeProvider[type];
 
   return (
-    <div className={`flex items-center p-2 rounded-lg border-l-4 ${border}`}>
+    <div className={`flex items-center p-2 rounded-lg z-50 border-l-4 ${border}`}>
       <Icon className={`${color} text-xl ${type == "loading" ? "animate-spin" : ""}`} />
       <span className="flex-1">{message}</span>
     </div>

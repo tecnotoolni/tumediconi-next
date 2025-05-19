@@ -19,6 +19,7 @@ interface CreateDoctorProps {
 
 export async function createDoctor({ data } : CreateDoctorProps) {
 
+
     const response = await fetch("/api/doctors/", {
         method: "POST",
         body: JSON.stringify(data),
