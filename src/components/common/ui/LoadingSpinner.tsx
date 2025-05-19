@@ -21,7 +21,7 @@ export default function LoadingSpinner({ className, message = es.others.taking_m
     return (
         <div className={`flex justify-center flex-col gap-2 text-center items-center size-full z-50 ${className || ""}`}>
             <TbCircleDashed className="animate-spin text-primary-500 text-4xl" />
-            {showMessage && <p className="text-sm text-primary-500 ">{message}</p>}
+            {showMessage && <p className="text-sm text-primary-500 z-40">{message}</p>}
         </div>
     )
 }

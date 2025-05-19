@@ -2,6 +2,7 @@
 import Avatar from "@/components/common/ui/Avatar";
 import Button from "@/components/common/ui/Button";
 import Modal from "@/components/common/ui/Modal";
+import DeleteCommunicationChannel from "@/components/private/forms/channel/DeleteChannel";
 import ManageCommunicationChannel from "@/components/private/forms/channel/ManageChannel";
 import SubpageTitle from "@/components/private/SubpageTitle";
 import { getPatientInteractionByDoctor } from "@/lib/interactionHandler";
@@ -10,9 +11,10 @@ import { UseAuthStore } from "@/store/useAuthStore";
 import { ContactChannel } from "@/types/ContactChannel";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import { PatientInteraction } from "@/types/Patient";
+import { Actions } from "@/types/UI";
 import React, { use, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { TbBrandFacebook, TbBrandInstagram, TbBrandTelegram, TbBrandTwitter, TbClipboard, TbEdit, TbExternalLink, TbGlobe, TbMail, TbPhone, TbPlus, TbTrash } from "react-icons/tb";
+import { TbBrandFacebook, TbBrandInstagram, TbBrandTelegram, TbBrandTwitter, TbClipboard, TbEdit, TbExternalLink, TbGlobe, TbMail, TbPhone, TbPlus, TbSpeakerphone, TbTrash } from "react-icons/tb";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -20,20 +22,42 @@ type Props = {
 
 export default function PatientDetailPage({ params }: Props) {
   const { id } = use(params)
+  
   const [isCommunicationOpen, setCommunicationIsOpen] = useState(false);
   const [isInteractionOpen, setInteractionOpen] = useState(false);
+
   const [interactions, setInteractions] = useState<PatientInteraction | null>(null);
   const { user } = UseAuthStore();
-  const [contactChannelValues, setContactChannelValues] = useState<KeyWithStringValue>({
+  const [contactChannelValues, setContactChannelValues] = useState<KeyWithStringValue>({})
+  const [contactChannelAction, setContactChannelAction] = useState<Actions>(Actions.create);
 
-  })
 
-    const handleCreateContactChannel = () => {
+  const contactChannelTitle = {
+    [Actions.create]: "Agregar Canal de Comunicación",
+    [Actions.update]: "Modificar Canal de Comunicación",
+    [Actions.delete]: "Eliminar Canal de Comunicación",
+  }
+
+  const handleDeleteContactChannel = (contactChannel : ContactChannel) => {
+    setContactChannelValues({
+      id: String(contactChannel.id),
+      name: contactChannel.name,
+      notes: contactChannel.notes,
+      patientID: String(contactChannel.patientID),
+      type: contactChannel.type,
+      value: contactChannel.value
+    })
+    setContactChannelAction(Actions.delete)
+    setCommunicationIsOpen(true)
+  }
+
+  const handleCreateContactChannel = () => {
     setContactChannelValues({
         patientID: String(interactions?.patient.id) || "",
         createdBy: String(user?.doctor?.id) || "",
     })
-
+    
+    setContactChannelAction(Actions.create)
     setCommunicationIsOpen(true)
   }
 
@@ -47,6 +71,7 @@ export default function PatientDetailPage({ params }: Props) {
       value: contactChannel.value
     })
 
+    setContactChannelAction(Actions.update)
     setCommunicationIsOpen(true)
   }
 
@@ -92,9 +117,9 @@ export default function PatientDetailPage({ params }: Props) {
             ))}
           </ul>
         </li>
-        <li>
+        <li className="col-span-2">
           <h2>Redes Sociales</h2>
-          <ul className="mt-2 flex gap-2">
+          <ul className="mt-2 flex gap-2 flex-wrap">
             {groupedChannels["social_media"]?.map((channel, index) => (
               <ContactChannelSocialMediaItem key={index} contactChannel={channel} />
             ))}
@@ -123,10 +148,7 @@ export default function PatientDetailPage({ params }: Props) {
             </button>
             <button
               className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-              onClick={() => {
-                toast.success("Copiado al portapapeles");
-                navigator.clipboard.writeText(contactChannel.value);
-              }}
+              onClick={() => {handleDeleteContactChannel(contactChannel)}}
             >
               <TbTrash className="size-5 text-primary-600" />
             </button>
@@ -162,10 +184,7 @@ export default function PatientDetailPage({ params }: Props) {
             </button>
             <button
               className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-              onClick={() => {
-                toast.success("Copiado al portapapeles");
-                navigator.clipboard.writeText(contactChannel.value);
-              }}
+              onClick={() => {handleDeleteContactChannel(contactChannel)}}
             >
               <TbTrash className="size-5 text-primary-600" />
             </button>
@@ -206,10 +225,7 @@ export default function PatientDetailPage({ params }: Props) {
         </button>
         <button
           className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-          onClick={() => {
-            toast.success("Copiado al portapapeles");
-            navigator.clipboard.writeText(contactChannel.value)
-          }}
+          onClick={() => {handleDeleteContactChannel(contactChannel)}}
         >
           <TbTrash className="size-5 text-primary-600" />
         </button>
@@ -229,50 +245,84 @@ export default function PatientDetailPage({ params }: Props) {
   return (
     <>
       <SubpageTitle title="Interacciones con Pacientes">
-          <Button
-              onClick={() => setInteractionOpen(true)}
-              color="gray"
-              label="Agregar Paciente sin Cuenta"
-              type="button"
-              icon={TbPlus}
-          />
+        <Button
+          onClick={() => setInteractionOpen(true)}
+          color="gray"
+          label="Agregar Paciente sin Cuenta"
+          type="button"
+          icon={TbPlus}
+        />
       </SubpageTitle>
 
       <article className="grid grid-cols-2 gap-4 min-h-48">
         <div className="flex gap-2 items-center p-4 h-full border border-cool-gray-100 rounded-lg font-raleway">
-          <Avatar className="size-24" url={interactions?.patient.user?.avatar?.fileUrl ? routes.api.base + interactions?.patient.user?.avatar?.fileUrl : ""} />
+          <Avatar
+            className="size-24"
+            url={
+              interactions?.patient.user?.avatar?.fileUrl
+                ? routes.api.base + interactions?.patient.user?.avatar?.fileUrl
+                : ""
+            }
+          />
           <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-medium">{interactions?.patient.firstName}</h2>
-            <p className="text-xl font-medium">{interactions?.patient.lastName}</p>
-            <span className="font-roboto font-light">{interactions?.patient.identityCard}</span>
+            <h2 className="text-xl font-medium">
+              {interactions?.patient.firstName}
+            </h2>
+            <p className="text-xl font-medium">
+              {interactions?.patient.lastName}
+            </p>
+            <span className="font-roboto font-light">
+              {interactions?.patient.identityCard}
+            </span>
           </div>
         </div>
-        <ListContactChannels contactChannels={interactions?.patient.contactChannels}>
-          <Button onClick={()=> {handleCreateContactChannel()}} color="blue" icon={TbPlus} type="button" className="absolute right-1 bottom-1 !text-sm !p-2" />
+        <ListContactChannels
+          contactChannels={interactions?.patient.contactChannels}
+        >
+          <Button
+            onClick={() => {
+              handleCreateContactChannel();
+            }}
+            color="blue"
+            icon={TbPlus}
+            type="button"
+            className="absolute right-1 top-1 !text-sm !p-2"
+          />
         </ListContactChannels>
       </article>
 
       <Modal
-        title="Agregar Canal de Comunicación"
+        title={
+          contactChannelTitle[
+            contactChannelAction as keyof typeof contactChannelTitle
+          ]
+        }
         open={isCommunicationOpen}
         onClose={() => setCommunicationIsOpen(false)}
+        icon={TbSpeakerphone}
       >
-        <ManageCommunicationChannel
-          onClose={() => setCommunicationIsOpen(false)}
-          reload={fetchCurrentPatient}
-          values={contactChannelValues}
-        />
+        {contactChannelAction != Actions.delete ? (
+          <ManageCommunicationChannel
+            onClose={() => setCommunicationIsOpen(false)}
+            reload={fetchCurrentPatient}
+            values={contactChannelValues}
+          />
+        ) : (
+          <DeleteCommunicationChannel
+            onClose={() => setCommunicationIsOpen(false)}
+            reload={fetchCurrentPatient}
+            values={contactChannelValues}
+          />
+        )}
       </Modal>
 
       <Modal
-        title="Agregar Interacción"
+        title={contactChannelTitle[Actions.delete]}
         open={isInteractionOpen}
         onClose={() => setInteractionOpen(false)}
       >
-        <>
-        </>
+        <></>
       </Modal>
-
     </>
   );
 }

@@ -61,7 +61,9 @@ const es = {
     },
     contact_channel: {
         error: {
-            post_unknown: "Ha ocurrido un error al tratar de crear un nuevo canal de contacto, por favor intenta nuevamente."
+            post_unknown: "Ha ocurrido un error al tratar de crear un nuevo canal de contacto, por favor intenta nuevamente.",
+            put_unknown: "Ha ocurrido un error al tratar de actualizar el canal de contacto, por favor intenta nuevamente.",
+            delete_unknown: "Ha ocurrido un error al tratar de eliminar el canal de contacto, por favor intenta nuevamente.",
         }
     }
 }

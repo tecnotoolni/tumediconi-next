@@ -7,7 +7,7 @@ interface RequestInitWithDuplex extends RequestInit {
 }
 
 async function forwardRequest(
-  method: 'GET' | 'POST' | 'PUT',
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   request: NextRequest,
   path: string[]
 ) {
@@ -74,6 +74,12 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
 
 export async function PUT(request: NextRequest, { params }: { params: { path: string[] } }) {
   const { backendRes } = await forwardRequest('PUT', request, (await params).path);
+  const res = await backendRes.json();
+  return NextResponse.json(res);
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: { path: string[] } }) {
+  const { backendRes } = await forwardRequest('DELETE', request, (await params).path);
   const res = await backendRes.json();
   return NextResponse.json(res);
 }

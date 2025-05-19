@@ -1,11 +1,13 @@
 import Button from "@/components/common/ui/Button";
+import LoadingSpinner from "@/components/common/ui/LoadingSpinner";
 import SelectInput from "@/components/common/ui/SelectInput";
 import TextInput from "@/components/common/ui/TextInput";
 import VisualSelect from "@/components/common/ui/VisualSelect";
-import { createContactChannel } from "@/lib/contactChannelHandler";
+import { createContactChannel, updateContactChannel } from "@/lib/contactChannelHandler";
 import { ContactChannelType } from "@/types/ContactChannel";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import Option from "@/types/Option";
+import { Status } from "@/types/UI";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { isValidEmail, isValidUrl } from "@/utils/validators";
 import { useEffect, useState } from "react";
@@ -24,6 +26,7 @@ export default function ManageCommunicationChannel({ values, onClose, reload} : 
     const [type, setType] = useState<string>();
     const [email, setEmail] = useState<string>("");
     const [link, setLink] = useState<string>("");
+    const [status, setStatus] = useState<Status>(Status.onhold);
 
     useEffect(() => {
         setData(values);
@@ -102,13 +105,9 @@ export default function ManageCommunicationChannel({ values, onClose, reload} : 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         try {
             event.preventDefault();
+            const editMode = values.id ? true : false;
 
-            toast.loading("Se está guardando el nuevo registro...")
-
-            if(values.id) {
-                console.log("On modifying actions")
-                return;
-            }
+            setStatus(Status.loading);
 
             const formData = new FormData(event.currentTarget);
 
@@ -118,42 +117,65 @@ export default function ManageCommunicationChannel({ values, onClose, reload} : 
             const value = formData.get("value")
             const type = formData.get("type")
             const notes = formData.get("type")
+            
+            let res;
 
-            const res = await createContactChannel({
-                data: {
-                    createdBy,
-                    name,
-                    value,
-                    notes,
-                    patientID,
-                    type
-                }
-            })
+            if (editMode) {
+                res = await updateContactChannel({
+                    data: {
+                        id: values.id,
+                        name,
+                        value,
+                        notes,
+                        type,
+                    }
+                })
+
+            } else {
+                res = await createContactChannel({
+                    data: {
+                        createdBy,
+                        name,
+                        value,
+                        notes,
+                        patientID,
+                        type
+                    }
+                })
+            }
+
 
             if(!res.success) {
                 setErrors(res.error?.issues)
+                setStatus(Status.onhold);
+                console.log(res.error)
                 throw new Error(res.error?.message)
             }
 
-            toast.success("Se ha guardado el registro exitosamente.")
+            toast.success(editMode ? "El canal de comunicación ha sido editado correctamente" : "El canal de comunicación ha sido creado correctamente")
+            setStatus(Status.success);
             onClose()
             reload()
+
         } catch(error) {
             toast.error(getErrorMessage(error))
+            setStatus(Status.onhold);
+            onClose()
         }
 
     }
     
     return(
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-4">
+        <form onSubmit={handleSubmit} className="relative flex flex-col gap-6 p-4">
+            {status == "loading" && <LoadingSpinner className="absolute top-0 left-0 before:bg-white/85 before:size-full before:absolute"/>}
             <section className="flex flex-col gap-4">
-                <input type="hidden" value={data.createdBy} name="createdBy" />
-                <input type="hidden" value={data.patientID} name="patientID" />
+                <input type="hidden" value={data.createdBy || ""} name="createdBy" />
+                <input type="hidden" value={data.patientID || ""} name="patientID" />
                 <VisualSelect onChange={setType} value={data.type} name="type" label="Canal de Comunicación" options={contactChannelTypeOptions} />
                 { 
                     type == ContactChannelType.social_media && (
                     <>
-                        <SelectInput required value={data.name} name="name" label="Red Social" options={socialMedias} />
+                        <SelectInput required value={data.name} name="name" error={errors?.name} label="Red Social" options={socialMedias} />
                         <TextInput onChange={setLink} value={data.value} required error={errors?.value} label="Vínculo" name="value" />
                     </>
                     )
@@ -161,15 +183,15 @@ export default function ManageCommunicationChannel({ values, onClose, reload} : 
                 {
                     type == ContactChannelType.phone && (
                     <>
-                        <TextInput required value={data.name} label="Nota" name="name" />
-                        <TextInput required value={data.value} label="Teléfono" type="text" name="value" />
+                        <TextInput required value={data.name} error={errors?.name} label="Nota" name="name" />
+                        <TextInput required value={data.value} error={errors?.value} label="Teléfono" type="text" name="value" />
                     </>
                     )
                 }
                 {
                     type == ContactChannelType.email && (
                     <>
-                        <TextInput required value={data.name} label="Nota" name="name" />
+                        <TextInput required value={data.name} error={errors?.name} label="Nota" name="name" />
                         <TextInput required value={data.value} error={errors?.value} onChange={setEmail} label="Correo" type="email" name="value" />
                     </>
                     )
