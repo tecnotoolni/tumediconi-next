@@ -1,5 +1,5 @@
 
-export enum Status {
+export enum StatusForm {
     loading = "loading",
     onhold = "onhold",
     success = "success",

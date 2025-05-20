@@ -34,7 +34,7 @@ export default function GeolocationSelects({ data, setDynamicData, fieldError, o
       const countries = await getCountries();
       const options = convertToOptionsFromCountries(countries.data);
       setDynamicOptions("countries", options);
-      setDynamicData("country", options[0]?.value || "");
+      setDynamicData("country", options[0]?.value);
     };
 
     fetchCountries().then(() => {
@@ -44,7 +44,9 @@ export default function GeolocationSelects({ data, setDynamicData, fieldError, o
 
   useEffect(() => {
     const fetchStates = async () => {
-      if (!data.country) return;
+      if (!data.country) {
+        data.country = options.countries[0]?.value;
+      };
       const states = await getStatesByCountryCode(data.country);
       setDynamicOptions("states", convertToOptionsFromStates(states.data));
     };
@@ -54,7 +56,7 @@ export default function GeolocationSelects({ data, setDynamicData, fieldError, o
 
   useEffect(() => {
     const fetchMunicipalities = async () => {
-      if (!data.country || !data.state) return;
+      if (!data.state) return;
       const municipalities = await getMunicipaltyByStateCode(data.state, data.country);
       setDynamicOptions("municipalities", convertToOptionsFromMunicipalities(municipalities.data));
     };

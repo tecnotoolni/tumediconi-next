@@ -7,7 +7,7 @@ import { createContactChannel, updateContactChannel } from "@/lib/contactChannel
 import { ContactChannelType } from "@/types/ContactChannel";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import Option from "@/types/Option";
-import { Status } from "@/types/UI";
+import { StatusForm } from "@/types/UI";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { isValidEmail, isValidUrl } from "@/utils/validators";
 import { useEffect, useState } from "react";
@@ -26,7 +26,7 @@ export default function ManageCommunicationChannel({ values, onClose, reload} : 
     const [type, setType] = useState<string>();
     const [email, setEmail] = useState<string>("");
     const [link, setLink] = useState<string>("");
-    const [status, setStatus] = useState<Status>(Status.onhold);
+    const [status, setStatus] = useState<StatusForm>(StatusForm.onhold);
 
     useEffect(() => {
         setData(values);
@@ -107,7 +107,7 @@ export default function ManageCommunicationChannel({ values, onClose, reload} : 
             event.preventDefault();
             const editMode = values.id ? true : false;
 
-            setStatus(Status.loading);
+            setStatus(StatusForm.loading);
 
             const formData = new FormData(event.currentTarget);
 
@@ -147,19 +147,19 @@ export default function ManageCommunicationChannel({ values, onClose, reload} : 
 
             if(!res.success) {
                 setErrors(res.error?.issues)
-                setStatus(Status.onhold);
+                setStatus(StatusForm.onhold);
                 console.log(res.error)
                 throw new Error(res.error?.message)
             }
 
             toast.success(editMode ? "El canal de comunicación ha sido editado correctamente" : "El canal de comunicación ha sido creado correctamente")
-            setStatus(Status.success);
+            setStatus(StatusForm.success);
             onClose()
             reload()
 
         } catch(error) {
             toast.error(getErrorMessage(error))
-            setStatus(Status.onhold);
+            setStatus(StatusForm.onhold);
             onClose()
         }
 

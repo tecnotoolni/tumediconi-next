@@ -53,6 +53,9 @@ const es = {
     patient: {
         error: {
             unknown: "Ha ocurrido un error al obtener los pacientes, por favor intenta nuevamente.",
+            post_unknown: "Ha ocurrido un error al tratar de crear un nuevo paciente, por favor intenta nuevamente.",
+            put_unknown: "Ha ocurrido un error al tratar de actualizar el paciente, por favor intenta nuevamente.",
+            delete_unknown: "Ha ocurrido un error al tratar de eliminar el paciente, por favor intenta nuevamente.",
         },
         success: {
             title: "Paciente creado",

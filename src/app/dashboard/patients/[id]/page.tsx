@@ -4,6 +4,7 @@ import Button from "@/components/common/ui/Button";
 import Modal from "@/components/common/ui/Modal";
 import DeleteCommunicationChannel from "@/components/private/forms/channel/DeleteChannel";
 import ManageCommunicationChannel from "@/components/private/forms/channel/ManageChannel";
+import ContactChannelItem from "@/components/private/items/ContactChannelItem";
 import SubpageTitle from "@/components/private/SubpageTitle";
 import { getPatientInteractionByDoctor } from "@/lib/interactionHandler";
 import routes from "@/sources/routes";
@@ -14,7 +15,7 @@ import { PatientInteraction } from "@/types/Patient";
 import { Actions } from "@/types/UI";
 import React, { use, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { TbBrandFacebook, TbBrandInstagram, TbBrandTelegram, TbBrandTwitter, TbClipboard, TbEdit, TbExternalLink, TbGlobe, TbMail, TbPhone, TbPlus, TbSpeakerphone, TbTrash } from "react-icons/tb";
+import { TbPlus, TbSpeakerphone } from "react-icons/tb";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -31,12 +32,18 @@ export default function PatientDetailPage({ params }: Props) {
   const [contactChannelValues, setContactChannelValues] = useState<KeyWithStringValue>({})
   const [contactChannelAction, setContactChannelAction] = useState<Actions>(Actions.create);
 
+  const interactionTitle = {
+    [Actions.create]: "Agregar Interacción",
+    [Actions.update]: "Modificar Interacción",
+    [Actions.delete]: "Eliminar Interacción",
+  }
 
   const contactChannelTitle = {
     [Actions.create]: "Agregar Canal de Comunicación",
     [Actions.update]: "Modificar Canal de Comunicación",
     [Actions.delete]: "Eliminar Canal de Comunicación",
   }
+
 
   const handleDeleteContactChannel = (contactChannel : ContactChannel) => {
     setContactChannelValues({
@@ -59,6 +66,11 @@ export default function PatientDetailPage({ params }: Props) {
     
     setContactChannelAction(Actions.create)
     setCommunicationIsOpen(true)
+  }
+
+  const handleCopyToClipboard = (value: string) => {
+    navigator.clipboard.writeText(value);
+    toast.success("Copiado al portapapeles");
   }
 
   const handleModifyContactChannel = (contactChannel : ContactChannel) => {
@@ -88,159 +100,37 @@ export default function PatientDetailPage({ params }: Props) {
 
   }, [fetchCurrentPatient]);
 
-    
-  const ListContactChannels = ({ contactChannels = [], children }: { contactChannels?: ContactChannel[], children : React.ReactNode }) => {
-    const groupedChannels = contactChannels.reduce<Record<string, ContactChannel[]>>((acc, channel) => {
-      if (!acc[channel.type]) {
-        acc[channel.type] = [];
-      }
-      acc[channel.type].push(channel);
-      return acc;
-    }, {});
+const ListContactChannels = ({
+  contactChannels = [],
+  children,
+}: {
+  contactChannels?: ContactChannel[];
+  children: React.ReactNode;
+}) => {
+  const types = [
+    { key: "phone", label: "Teléfonos" },
+    { key: "email", label: "Correos" },
+    { key: "social_media", label: "Redes Sociales" },
+  ];
 
-    return (
-      <ul className="relative gap-4 grid grid-cols-2 p-4 h-full border border-cool-gray-100 rounded-lg font-raleway">
-        {children}
-        <li>
-          <h2>Teléfonos</h2>
-          <ul className="mt-2 flex flex-col gap-2">
-            {groupedChannels["phone"]?.map((channel, index) => (
-              <ContactChannelPhoneItem key={index} contactChannel={channel} />
-            ))}
+  return (
+    <ul className="relative gap-4 grid grid-cols-2 p-4 h-full border border-cool-gray-100 rounded-lg font-raleway">
+      {children}
+      {types.map(({ key, label }) => (
+        <li key={key} className={key === "social_media" ? "col-span-2" : ""}>
+          <h2>{label}</h2>
+          <ul className={`mt-2 ${key === "social_media" ? "flex gap-2 flex-wrap" : "flex flex-col gap-2"}`}>
+            {contactChannels
+              .filter((channel) => channel.type === key)
+              .map((channel) => (
+                <ContactChannelItem handleCopyToClipboard={handleCopyToClipboard} handleModifyContactChannel={handleModifyContactChannel} handleDeleteContactChannel={handleDeleteContactChannel} key={channel.id} contactChannel={channel} />
+              ))}
           </ul>
         </li>
-        <li>
-          <h2>Correos</h2>
-          <ul className="mt-2 flex flex-col gap-2">
-            {groupedChannels["email"]?.map((channel, index) => (
-              <ContactChannelEmailItem key={index} contactChannel={channel} />
-            ))}
-          </ul>
-        </li>
-        <li className="col-span-2">
-          <h2>Redes Sociales</h2>
-          <ul className="mt-2 flex gap-2 flex-wrap">
-            {groupedChannels["social_media"]?.map((channel, index) => (
-              <ContactChannelSocialMediaItem key={index} contactChannel={channel} />
-            ))}
-          </ul>
-        </li>
-      </ul>
-    );
-  };
-
-  const ContactChannelPhoneItem = ({contactChannel}: { contactChannel : ContactChannel}) => {
-    return (
-      <li
-        key={contactChannel.id}
-        className="flex flex-col gap-1 items-start text-cool-gray-700"
-      >
-        <div className="flex gap-2 w-full">
-          <TbPhone className="size-5" />
-
-          <span className="font-light flex-1 leading-none">{contactChannel.name}</span>
-          <div className="flex justify-end items-start">
-            <button
-              className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-              onClick={() => { handleModifyContactChannel(contactChannel) }}
-            >
-              <TbEdit className="size-5 text-primary-600" />
-            </button>
-            <button
-              className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-              onClick={() => {handleDeleteContactChannel(contactChannel)}}
-            >
-              <TbTrash className="size-5 text-primary-600" />
-            </button>
-            <a
-              href={`mailto:${contactChannel.value}`}
-              className="flex items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-            >
-              <TbExternalLink className="size-5 text-primary-600" />
-            </a>
-          </div>
-        </div>
-        <span className="text-md break-all font-roboto">{contactChannel.value}</span>
-      </li>
-    );
-  }
-
-  const ContactChannelEmailItem = ({contactChannel}: { contactChannel : ContactChannel}) => {
-
-    return(
-      <li
-        key={contactChannel.id}
-        className="flex flex-col gap-1 items-start text-cool-gray-700"
-      >
-        <div className="flex gap-2 w-full">
-          <TbMail className="size-5" />
-          <span className="font-light flex-1 leading-none">{contactChannel.name}</span>
-          <div className="flex justify-end items-start">
-            <button
-              className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-              onClick={() => { handleModifyContactChannel(contactChannel) }}
-            >
-              <TbEdit className="size-5 text-primary-600" />
-            </button>
-            <button
-              className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-              onClick={() => {handleDeleteContactChannel(contactChannel)}}
-            >
-              <TbTrash className="size-5 text-primary-600" />
-            </button>
-            <a
-              href={`mailto:${contactChannel.value}`}
-              className="flex items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-            >
-              <TbExternalLink className="size-5 text-primary-600" />
-            </a>
-          </div>
-        </div>
-        <span className="text-md break-all font-roboto">{contactChannel.value}</span>
-      </li>
-    )
-  }
-
-  const ContactChannelSocialMediaItem = ({contactChannel}: { contactChannel : ContactChannel}) => {
-
-    const registeredSocialMedia = {
-      facebook: TbBrandFacebook,
-      instagram: TbBrandInstagram,
-      twitterx: TbBrandTwitter,
-      telegram: TbBrandTelegram,
-    }
-
-    const Icon = registeredSocialMedia[contactChannel.name as keyof typeof registeredSocialMedia] || TbGlobe;
-
-    return(
-      <li className="flex gap-1">
-        <a href={contactChannel.value} target="_blank" rel="noopener noreferrer" className="text-2xl">
-          {Icon && <Icon />}
-        </a>
-        <button
-          className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-          onClick={() => { handleModifyContactChannel(contactChannel) }}
-        >
-          <TbEdit className="size-5 text-primary-600" />
-        </button>
-        <button
-          className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-          onClick={() => {handleDeleteContactChannel(contactChannel)}}
-        >
-          <TbTrash className="size-5 text-primary-600" />
-        </button>
-        <button
-          className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
-          onClick={() => {
-            toast.success("Copiado al portapapeles");
-            navigator.clipboard.writeText(contactChannel.value)
-          }}
-        >
-          <TbClipboard className="size-5 text-primary-600" />
-        </button>
-      </li>
-    )
-  }
+      ))}
+    </ul>
+  );
+};
   
   return (
     <>
@@ -248,7 +138,7 @@ export default function PatientDetailPage({ params }: Props) {
         <Button
           onClick={() => setInteractionOpen(true)}
           color="gray"
-          label="Agregar Paciente sin Cuenta"
+          label="Agregar Interacción"
           type="button"
           icon={TbPlus}
         />
@@ -280,15 +170,25 @@ export default function PatientDetailPage({ params }: Props) {
           contactChannels={interactions?.patient.contactChannels}
         >
           <Button
-            onClick={() => {
-              handleCreateContactChannel();
-            }}
+            onClick={handleCreateContactChannel}
             color="blue"
             icon={TbPlus}
             type="button"
             className="absolute right-1 top-1 !text-sm !p-2"
           />
         </ListContactChannels>
+      </article>
+
+      <article className="flex flex-col gap-4">
+        <h2 className="text-xl font-medium text-cool-gray-700">Historial de Interacciones</h2>
+        <div className="py-2 rounded-full flex gap-4 text-center text-cool-gray-300 bg-cool-gray-50">
+          <span className="flex-1">Fecha de Interacción</span>
+          <span className="flex-1">Nombre de Interacción</span>
+          <span className="flex-1">Tipo de Interacción</span>
+          <span className="flex-1">Creado</span>
+          <span className="flex-1">Archivos Adjuntos</span>
+          <span className="w-12"></span>
+        </div>
       </article>
 
       <Modal
@@ -317,7 +217,7 @@ export default function PatientDetailPage({ params }: Props) {
       </Modal>
 
       <Modal
-        title={contactChannelTitle[Actions.delete]}
+        title={interactionTitle[Actions.create]}
         open={isInteractionOpen}
         onClose={() => setInteractionOpen(false)}
       >

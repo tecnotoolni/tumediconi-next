@@ -1,6 +1,6 @@
 import Button from "@/components/common/ui/Button";
 import LoadingSpinner from "@/components/common/ui/LoadingSpinner";
-import { deleteContactChannel } from "@/lib/contactChannelHandler";
+import { deletePatientProspect } from "@/lib/patientHandler";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import { StatusForm } from "@/types/UI";
 import { getErrorMessage } from "@/utils/getErrorMessage";
@@ -13,7 +13,7 @@ interface Props {
     reload: () => void
 }
 
-export default function DeleteCommunicationChannel({ values, onClose, reload} : Props) {
+export default function DeletePatientProspect({ values, onClose, reload} : Props) {
     const [data, setData] = useState<KeyWithStringValue>({});
     const [status, setStatus] = useState<StatusForm>(StatusForm.onhold);
 
@@ -31,7 +31,7 @@ export default function DeleteCommunicationChannel({ values, onClose, reload} : 
             const formData = new FormData(event.currentTarget);
             const id = formData.get("id")
             
-            const res = await deleteContactChannel(id)
+            const res = await deletePatientProspect(id)
 
 
             if(!res.success) {
@@ -41,7 +41,7 @@ export default function DeleteCommunicationChannel({ values, onClose, reload} : 
 
             console.log(res)
 
-            toast.success("Canal de comunicación eliminado correctamente")
+            toast.success("Prospecto de paciente eliminado correctamente")
             setStatus(StatusForm.success);
             onClose()
             reload()
@@ -59,7 +59,7 @@ export default function DeleteCommunicationChannel({ values, onClose, reload} : 
             {status == "loading" && <LoadingSpinner className="absolute top-0 left-0 before:bg-white/85 before:size-full before:absolute"/>}
             <input type="hidden" name="id" value={data.id} />
             <section className="flex flex-col gap-4">
-                <p>¿Deseas eliminar este canal de comunicación?</p>
+                <p>¿Deseas eliminar este prospecto de paciente?</p>
             </section>
             <div className="flex justify-end gap-2">
                 <Button color="blue" label="Aceptar" type="submit" />
