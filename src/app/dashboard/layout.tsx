@@ -51,7 +51,7 @@ export default function DashboardLayout({
 
   return (
     <main className="flex flex-col gap-4 size-full max-w-screen-xl mx-auto p-8">
-      <section className="flex flex-col gap-4 flex-1 border border-cool-gray-200 rounded-2xl p-8">
+      <section className="flex flex-col gap-4 flex-1 border border-cool-gray-200 rounded-2xl p-8 overflow-scroll">
         {children}
       </section>
       <nav className="flex justify-between gap-4">

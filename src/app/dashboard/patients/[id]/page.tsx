@@ -2,8 +2,10 @@
 import Avatar from "@/components/common/ui/Avatar";
 import Button from "@/components/common/ui/Button";
 import Modal from "@/components/common/ui/Modal";
+import InteractionCard from "@/components/private/cards/InteractionCard";
 import DeleteCommunicationChannel from "@/components/private/forms/channel/DeleteChannel";
 import ManageCommunicationChannel from "@/components/private/forms/channel/ManageChannel";
+import ManageInteraction from "@/components/private/forms/interaction/ManageInteraction";
 import ContactChannelItem from "@/components/private/items/ContactChannelItem";
 import SubpageTitle from "@/components/private/SubpageTitle";
 import { getPatientInteractionByDoctor } from "@/lib/interactionHandler";
@@ -25,12 +27,16 @@ export default function PatientDetailPage({ params }: Props) {
   const { id } = use(params)
   
   const [isCommunicationOpen, setCommunicationIsOpen] = useState(false);
+  const [contactChannelValues, setContactChannelValues] = useState<KeyWithStringValue>({})
+  const [contactChannelAction, setContactChannelAction] = useState<Actions>(Actions.create);
+
   const [isInteractionOpen, setInteractionOpen] = useState(false);
+  const [interactionValues, setInteractionValues] = useState<KeyWithStringValue>({});
+  const [interactionAction, setInteractionAction] = useState<Actions>(Actions.create);
 
   const [interactions, setInteractions] = useState<PatientInteraction | null>(null);
   const { user } = UseAuthStore();
-  const [contactChannelValues, setContactChannelValues] = useState<KeyWithStringValue>({})
-  const [contactChannelAction, setContactChannelAction] = useState<Actions>(Actions.create);
+
 
   const interactionTitle = {
     [Actions.create]: "Agregar Interacción",
@@ -68,6 +74,15 @@ export default function PatientDetailPage({ params }: Props) {
     setCommunicationIsOpen(true)
   }
 
+  const handleCreateInteraction = () => {
+    setInteractionValues({
+      patientID: String(interactions?.patient.id) || "",
+      doctorID: String(user?.doctor?.id) || "",
+    })
+    setInteractionAction(Actions.create)
+    setInteractionOpen(true)
+  }
+
   const handleCopyToClipboard = (value: string) => {
     navigator.clipboard.writeText(value);
     toast.success("Copiado al portapapeles");
@@ -92,6 +107,7 @@ export default function PatientDetailPage({ params }: Props) {
       return;
     }
     const interactions = await getPatientInteractionByDoctor(user?.doctor?.id, parseInt(id));
+    console.log(interactions);
     setInteractions(interactions.data);
   }, [user?.doctor, id]);
 
@@ -136,7 +152,7 @@ const ListContactChannels = ({
     <>
       <SubpageTitle title="Interacciones con Pacientes">
         <Button
-          onClick={() => setInteractionOpen(true)}
+          onClick={handleCreateInteraction}
           color="gray"
           label="Agregar Interacción"
           type="button"
@@ -181,7 +197,7 @@ const ListContactChannels = ({
 
       <article className="flex flex-col gap-4">
         <h2 className="text-xl font-medium text-cool-gray-700">Historial de Interacciones</h2>
-        <div className="py-2 rounded-full flex gap-4 text-center text-cool-gray-300 bg-cool-gray-50">
+        <div className="p-2 rounded-full flex gap-4 text-center items-center text-cool-gray-300 bg-cool-gray-50">
           <span className="flex-1">Fecha de Interacción</span>
           <span className="flex-1">Nombre de Interacción</span>
           <span className="flex-1">Tipo de Interacción</span>
@@ -189,6 +205,11 @@ const ListContactChannels = ({
           <span className="flex-1">Archivos Adjuntos</span>
           <span className="w-12"></span>
         </div>
+        {
+          interactions?.interactions.map((interaction, index) => (
+            <InteractionCard interaction={interaction} key={index} handleDelete={() =>{ }} handleEdit={()=>{ }} />
+          ))
+        }
       </article>
 
       <Modal
@@ -217,11 +238,11 @@ const ListContactChannels = ({
       </Modal>
 
       <Modal
-        title={interactionTitle[Actions.create]}
+        title={interactionTitle[interactionAction as keyof typeof interactionTitle]}
         open={isInteractionOpen}
         onClose={() => setInteractionOpen(false)}
       >
-        <></>
+        <ManageInteraction values={interactionValues} onClose={()=> { setInteractionOpen(false) }} reload={fetchCurrentPatient}/>
       </Modal>
     </>
   );

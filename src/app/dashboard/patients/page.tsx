@@ -82,7 +82,7 @@ export default function DashboardInteractions() {
         </SubpageTitle>
 
         <article className="flex flex-col gap-4">
-          <div className="py-2 rounded-full flex gap-4 text-center text-cool-gray-300 bg-cool-gray-50">
+          <div className="py-2 rounded-full flex gap-4 text-center items-center text-cool-gray-300 bg-cool-gray-50">
             <span className="w-16"></span>
             <span className="flex-1">Nombres</span>
             <span className="flex-1">Apellidos</span>

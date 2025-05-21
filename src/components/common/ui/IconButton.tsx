@@ -21,6 +21,7 @@ export default function IconButton({ type = "button", href, onClick, icon: Icon 
             <button
                 className="flex cursor-pointer items-center justify-center active:scale-95 text-cool-gray-700 hover:text-primary-600 transition-all"
                 onClick={onClick}
+                type={type}
             >
                 <Icon className="size-5 text-primary-600" />
             </button>

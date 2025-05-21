@@ -1,3 +1,4 @@
+import { PatientInteractionAttachment } from "./patientInteractionAttachment";
 import Status from "./Status";
 
 export interface Interaction {
@@ -9,10 +10,12 @@ export interface Interaction {
     interactionDate: Date;
     notes: string;
     status: Status;
-    creationAction: string;
+    creationAction: CreationActionType;
     createdAt: Date;
     updatedAt: Date | null;
     removedAt: Date | null;
+
+    patientInteractionFile: PatientInteractionAttachment[];
 }
 
 export enum InteractionType {

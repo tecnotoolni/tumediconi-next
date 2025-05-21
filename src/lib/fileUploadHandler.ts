@@ -6,9 +6,10 @@ interface Props {
     file?: File;
     name?: string;
     description?: string;
+    isPrivate?: boolean;
 }
 
-export default async function fileUploadHandler({file, name, description}: Props) {
+export default async function fileUploadHandler({file, name, description, isPrivate}: Props) {
 
     const formData = new FormData();
 
@@ -18,6 +19,7 @@ export default async function fileUploadHandler({file, name, description}: Props
 
     if (name) formData.append("name", name);
     if (description) formData.append("description", description);
+    if (isPrivate) formData.append("isPrivate", "true");
 
 
     const response = await fetch("/api/files/upload", {

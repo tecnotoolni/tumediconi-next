@@ -44,6 +44,7 @@ const es = {
     doctor: {
         error: {
             unknown: "Ha ocurrido un error al crear el doctor, por favor intenta nuevamente.",
+            post_unknown: "Ha ocurrido un error al tratar de crear un nuevo doctor, por favor intenta nuevamente.",
         },
         success: {
             title: "Doctor creado",
