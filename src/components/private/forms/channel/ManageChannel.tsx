@@ -162,7 +162,6 @@ export default function ManageCommunicationChannel({ values, onClose, reload} : 
             setStatus(StatusForm.onhold);
             onClose()
         }
-
     }
     
     return(

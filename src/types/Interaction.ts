@@ -1,4 +1,4 @@
-import { PatientInteractionAttachment } from "./patientInteractionAttachment";
+import { InteractionAttachments } from "./patientInteractionAttachment";
 import Status from "./Status";
 
 export interface Interaction {
@@ -15,7 +15,7 @@ export interface Interaction {
     updatedAt: Date | null;
     removedAt: Date | null;
 
-    patientInteractionFile: PatientInteractionAttachment[];
+    interactionAttachments: InteractionAttachments[];
 }
 
 export enum InteractionType {

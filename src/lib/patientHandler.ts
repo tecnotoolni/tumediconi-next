@@ -3,7 +3,7 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { Patient } from "@/types/Patient";
 
 export async function getPatientsByDoctorAsignment(doctorID: number) {
-    const response = await fetch(`/api/doctors/${doctorID.toString()}/patients`, {
+    const response = await fetch(`/api/interactions/doctors/${doctorID.toString()}/patients`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"

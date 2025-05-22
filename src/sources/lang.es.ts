@@ -45,10 +45,25 @@ const es = {
         error: {
             unknown: "Ha ocurrido un error al crear el doctor, por favor intenta nuevamente.",
             post_unknown: "Ha ocurrido un error al tratar de crear un nuevo doctor, por favor intenta nuevamente.",
+            put_unknown: "Ha ocurrido un error al tratar de actualizar el doctor, por favor intenta nuevamente.",
+            delete_unknown: "Ha ocurrido un error al tratar de eliminar el doctor, por favor intenta nuevamente.",
         },
         success: {
             title: "Doctor creado",
             message: "El doctor ha sido creado correctamente.",
+        }
+    },
+    service: {
+        error: {
+            unknown: "Ha ocurrido un error al crear el servicio, por favor intenta nuevamente.",
+            get_unknown: "Ha ocurrido un error al obtener los servicios, por favor intenta nuevamente.",
+            post_unknown: "Ha ocurrido un error al tratar de crear un nuevo servicio, por favor intenta nuevamente.",
+            put_unknown: "Ha ocurrido un error al tratar de actualizar el servicio, por favor intenta nuevamente.",
+            delete_unknown: "Ha ocurrido un error al tratar de eliminar el servicio, por favor intenta nuevamente.",
+        },
+        success: {
+            title: "Servicio creado",
+            message: "El servicio ha sido creado correctamente.",
         }
     },
     patient: {

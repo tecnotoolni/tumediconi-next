@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { redirect, usePathname } from "next/navigation";
 import Link from "next/link";
 import { TbCalendarClock, TbHeartHandshake, TbUserCircle } from "react-icons/tb";
@@ -8,6 +8,8 @@ import routes from "@/sources/routes";
 import Avatar from "@/components/common/ui/Avatar";
 import { UseAuthStore } from "@/store/useAuthStore";
 import { UserRole } from "@/types/User";
+import { StatusForm } from "@/types/UI";
+import LoadingSpinner from "@/components/common/ui/LoadingSpinner";
 
 export default function DashboardLayout({
   children,
@@ -16,6 +18,7 @@ export default function DashboardLayout({
 }>) {
   const { user } = UseAuthStore();
   const pathname = usePathname();
+  const [status, setStatus] = useState<StatusForm>(StatusForm.loading)
 
   useEffect(() => {
     if (!user) return;
@@ -29,6 +32,8 @@ export default function DashboardLayout({
     if (!isAdmin && (isDoctorWithoutProfile || isPatientWithoutProfile)) {
       redirect(routes.authentication.finish);
     }
+
+    setStatus(StatusForm.onhold);
   }, [user]);
 
   const menus = [
@@ -51,6 +56,7 @@ export default function DashboardLayout({
 
   return (
     <main className="flex flex-col gap-4 size-full max-w-screen-xl mx-auto p-8">
+      <LoadingSpinner className={`absolute top-0 left-0 before:size-full transition-all before:absolute before:bg-white/85 ${ status == StatusForm.loading ? "opacity-100" : "opacity-0 pointer-events-none" }`}/>
       <section className="flex flex-col gap-4 flex-1 border border-cool-gray-200 rounded-2xl p-8 overflow-scroll">
         {children}
       </section>

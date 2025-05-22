@@ -33,7 +33,7 @@ export default function FileReadOnlyCard({ file } : Props) {
     return (
         <div className="bg-white p-2 flex gap-4 rounded-lg border border-cool-gray-100 items-center">
             <div className="flex gap-1 items-center">
-                <FileIcon className="text-lg" fileName={file.name} />
+                <FileIcon type={file.type} className="text-lg" fileName={file.name} />
                 <span>{file.name}</span>
             </div>
             <div className="flex gap-2">

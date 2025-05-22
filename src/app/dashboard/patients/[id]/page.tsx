@@ -5,6 +5,7 @@ import Modal from "@/components/common/ui/Modal";
 import InteractionCard from "@/components/private/cards/InteractionCard";
 import DeleteCommunicationChannel from "@/components/private/forms/channel/DeleteChannel";
 import ManageCommunicationChannel from "@/components/private/forms/channel/ManageChannel";
+import DeleteInteraction from "@/components/private/forms/interaction/DeleteInteraction";
 import ManageInteraction from "@/components/private/forms/interaction/ManageInteraction";
 import ContactChannelItem from "@/components/private/items/ContactChannelItem";
 import SubpageTitle from "@/components/private/SubpageTitle";
@@ -12,9 +13,12 @@ import { getPatientInteractionByDoctor } from "@/lib/interactionHandler";
 import routes from "@/sources/routes";
 import { UseAuthStore } from "@/store/useAuthStore";
 import { ContactChannel } from "@/types/ContactChannel";
+import FileData from "@/types/FileData";
+import { Interaction } from "@/types/Interaction";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import { PatientInteraction } from "@/types/Patient";
 import { Actions } from "@/types/UI";
+import { formatDateToISO } from "@/utils/convertToReadableDate";
 import React, { use, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TbPlus, TbSpeakerphone } from "react-icons/tb";
@@ -33,6 +37,7 @@ export default function PatientDetailPage({ params }: Props) {
   const [isInteractionOpen, setInteractionOpen] = useState(false);
   const [interactionValues, setInteractionValues] = useState<KeyWithStringValue>({});
   const [interactionAction, setInteractionAction] = useState<Actions>(Actions.create);
+  const [interactionAttachments, setInteractionAttachments] = useState<FileData[] | undefined>([]);
 
   const [interactions, setInteractions] = useState<PatientInteraction | null>(null);
   const { user } = UseAuthStore();
@@ -48,6 +53,34 @@ export default function PatientDetailPage({ params }: Props) {
     [Actions.create]: "Agregar Canal de Comunicación",
     [Actions.update]: "Modificar Canal de Comunicación",
     [Actions.delete]: "Eliminar Canal de Comunicación",
+  }
+
+  const handleModifyInteraction = (interaction : Interaction) => {
+    setInteractionValues({
+      id: String(interaction.id),
+      notes: interaction.notes,
+      name: interaction.name,
+      patientID: String(interaction.patientID),
+      doctorID: String(interaction.doctorID),
+      interaction_type: interaction.interactionType,
+      interaction_date: interaction.interactionDate ? formatDateToISO(String(interaction.interactionDate)) : "",
+    })
+
+
+    const attachments = interaction.interactionAttachments.map((attachment) => attachment.file).filter((file): file is FileData => file !== undefined)
+
+    setInteractionAttachments(attachments)
+    setInteractionAction(Actions.update)
+    setInteractionOpen(true)
+  }
+
+  const handleDeleteInteraction = (interaction : Interaction) => {
+    setInteractionValues({
+      id: String(interaction.id),
+    })
+
+    setInteractionAction(Actions.delete)
+    setInteractionOpen(true)
   }
 
 
@@ -75,11 +108,14 @@ export default function PatientDetailPage({ params }: Props) {
   }
 
   const handleCreateInteraction = () => {
+    
     setInteractionValues({
       patientID: String(interactions?.patient.id) || "",
       doctorID: String(user?.doctor?.id) || "",
     })
+
     setInteractionAction(Actions.create)
+    setInteractionAttachments([])
     setInteractionOpen(true)
   }
 
@@ -207,7 +243,7 @@ const ListContactChannels = ({
         </div>
         {
           interactions?.interactions.map((interaction, index) => (
-            <InteractionCard interaction={interaction} key={index} handleDelete={() =>{ }} handleEdit={()=>{ }} />
+            <InteractionCard interaction={interaction} key={index} handleDeleteInteraction={handleDeleteInteraction} handleModifyInteraction={handleModifyInteraction} />
           ))
         }
       </article>
@@ -242,7 +278,22 @@ const ListContactChannels = ({
         open={isInteractionOpen}
         onClose={() => setInteractionOpen(false)}
       >
-        <ManageInteraction values={interactionValues} onClose={()=> { setInteractionOpen(false) }} reload={fetchCurrentPatient}/>
+        {
+          interactionAction != Actions.delete ? (
+            <ManageInteraction
+              onClose={() => setInteractionOpen(false)}
+              reload={fetchCurrentPatient}
+              values={interactionValues}
+              attachments={interactionAttachments}
+            />
+          ) : (
+            <DeleteInteraction
+              onClose={() => setInteractionOpen(false)}
+              reload={fetchCurrentPatient}
+              values={interactionValues}
+            />
+          )
+        }
       </Modal>
     </>
   );

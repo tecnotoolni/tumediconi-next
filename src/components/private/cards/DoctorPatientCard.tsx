@@ -49,9 +49,6 @@ export default function DoctorPatientCard({ patient, href, onDelete, onEdit} : P
                     <span>{patient.identityCard}</span>
                 </div>
                 <div className="flex-1 flex justify-center" >
-                    <span>{patient.address}</span>
-                </div>
-                <div className="flex-1 flex justify-center" >
                     <span className={`py-2 px-4 rounded-full ${statusColor[patient.status]}`}>{PatientStatus[patient.status]}</span>
                 </div>
                 <div className="flex-1 flex justify-center" >

@@ -15,7 +15,7 @@ export default function FileCard({upload, onDelete} : Props) {
     return(
         <li key={upload.id} className="p-2 flex gap-2 items-center">
             <div className="flex justify-center items-center h-full p-2 w-auto aspect-square text-2xl rounded-lg text-primary-800 bg-white">
-                <FileIcon fileName={upload.name} />
+                <FileIcon type={upload.type} fileName={upload.name} />
             </div>
             <div className="flex flex-col flex-1">
                 <span className="text-primary-800">{upload.name}</span>

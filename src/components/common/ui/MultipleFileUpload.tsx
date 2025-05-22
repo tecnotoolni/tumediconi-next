@@ -14,14 +14,19 @@ interface UploadFile {
 interface Props {
     isPrivate?: boolean;
     name: string;
+    attachments?: FileData[];
 }
 
-export default function MultipleFileUpload({isPrivate, name} : Props) {
+export default function MultipleFileUpload({isPrivate, name, attachments} : Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [uploadQueue, setUploadQueue] = useState<UploadFile[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<FileData[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    setUploadedFiles(attachments || [])
+  }, [attachments]);
 
   useEffect(() => {
     console.log(uploadQueue);

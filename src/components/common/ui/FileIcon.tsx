@@ -1,13 +1,16 @@
 import { TbFile, TbFileText, TbFileTypeDoc, TbFileTypeDocx, TbFileTypeJpg, TbFileTypePdf, TbFileTypePng, TbFileTypeXls } from "react-icons/tb";
 
 interface Props {
+    type?: string | null,
     fileName?: string | null,
     className?: string
 }
 
-export default function FileIcon({ fileName, className }: Props) {
+export default function FileIcon({ fileName, className, type }: Props) {
 
-    const extension = fileName?.split(".").pop()?.toLowerCase(); 
+    const extension = type?.split("/").pop()?.toLocaleLowerCase() || fileName?.split(".").pop()?.toLowerCase(); 
+
+    console.log("FileIcon", { fileName, type, extension });
 
     const files = {
         pdf: {

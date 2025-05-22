@@ -1,6 +1,6 @@
 import FileData from "./FileData";
 
-export interface PatientInteractionAttachment {
+export interface InteractionAttachments {
     id: number;
     patientInteractionID: number;
     fileID: number;

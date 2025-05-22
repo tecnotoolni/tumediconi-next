@@ -8,8 +8,8 @@ import FileReadOnlyCard from "./FileReadOnlyCard";
 
 interface Props {
     interaction: Interaction;
-    handleEdit: () => void;
-    handleDelete: () => void;
+    handleModifyInteraction: (interaction: Interaction) => void;
+    handleDeleteInteraction: (interaction: Interaction) => void;
 }
 
 const action = {
@@ -54,7 +54,7 @@ const types = {
     }
 }
 
-export default function InteractionCard({ interaction, handleEdit, handleDelete }: Props) {
+export default function InteractionCard({ interaction, handleModifyInteraction, handleDeleteInteraction }: Props) {
     const [open, setOpen] = useState(false);
     const TypeIcon = types[interaction.interactionType].icon;
 
@@ -83,26 +83,26 @@ export default function InteractionCard({ interaction, handleEdit, handleDelete 
                         </span>
                     </div>
                     <span className="flex-1">
-                        {interaction.patientInteractionFile?.length || 0}
+                        {interaction.interactionAttachments?.length || 0}
                     </span>
                 </button>
                 <div className="flex gap-2">
-                    <IconButton icon={TbEdit} onClick={handleEdit} />
-                    <IconButton icon={TbTrash} onClick={handleDelete} />
+                    <IconButton icon={TbEdit} onClick={() => { handleModifyInteraction(interaction) }} />
+                    <IconButton icon={TbTrash} onClick={() => { handleDeleteInteraction(interaction) }} />
                 </div>
             </div>
-            <div className={`flex flex-col bg-cool-gray-50 rounded-lg p-4 gap-4 ${open ? "max-h-96 mt-2" : "max-h-0 !p-0 mt-0"} overflow-hidden transition-all duration-300`}>
+            <div className={`flex flex-col bg-cool-gray-50 rounded-lg p-4 gap-4 ${open ? "max-h-96 mt-2 opacity-100" : "max-h-0 !p-0 mt-0 opacity-0"} overflow-hidden transition-all duration-300`}>
                 <div className="flex flex-col gap-2">
                     <h3 className="text-xl font-raleway text-cool-gray-700">Notas de la Interacción</h3>
                     <div className="bg-white p-4 w-full rounded-lg">
                         <div dangerouslySetInnerHTML={{ __html: interaction.notes }} className="prose max-w-none     text-cool-gray-700 font-roboto" />
                     </div>
                 </div>
-                {(interaction.patientInteractionFile?.length ?? 0) > 0 && <div className="flex flex-col gap-2">
+                {(interaction.interactionAttachments?.length ?? 0) > 0 && <div className="flex flex-col gap-2">
                     <h3 className="text-lg font-raleway text-cool-gray-700">Archivos Adjuntos</h3>
                     <ul className="flex gap-2 flex-wrap">
                         {
-                            interaction.patientInteractionFile?.map((attachment) => (
+                            interaction.interactionAttachments?.map((attachment) => (
                                 <FileReadOnlyCard key={attachment.id} file={attachment.file} />
                             ))
                         }

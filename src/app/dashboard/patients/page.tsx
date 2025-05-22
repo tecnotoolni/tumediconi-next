@@ -23,7 +23,9 @@ export default function DashboardInteractions() {
 
     const handleCreate = () => {
         setPatientAction(Actions.create);
-        setPatientsValues({})
+        setPatientsValues({
+          doctorID: String(user?.doctor?.id),
+        })
         setIsOpen(true);
     }
 
@@ -89,7 +91,6 @@ export default function DashboardInteractions() {
             <span className="flex-1">Cumpleaños</span>
             <span className="flex-1">Sexo</span>
             <span className="flex-1">Cédula</span>
-            <span className="flex-1">Dirección</span>
             <span className="flex-1">Estado</span>
             <span className="flex-1">Municipio</span>
             <span className="w-12"></span>

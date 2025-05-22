@@ -37,6 +37,14 @@ const Tiptap = ({ onChange, value }: Props) => {
     content: value || '',
   })
 
+  // Actualiza el contenido del editor si value cambia externamente
+  useEffect(() => {
+
+    if (editor) {
+      editor.commands.setContent(value || '')
+    }
+  }, [value, editor])
+
   useEffect(() => {
     if (!editor || !onChange) return
 
@@ -50,7 +58,6 @@ const Tiptap = ({ onChange, value }: Props) => {
       editor.off('update', updateHandler)
     }
   }, [editor, onChange])
-
 
   if (!editor) return null
 
