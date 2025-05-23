@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Avatar from "./Avatar";
 import Button from "./Button";
 import { TbRestore, TbUpload } from "react-icons/tb";
-import fileUploadHandler from "@/lib/fileUploadHandler";
+import fileUploadHandler from "@/lib/private/fileUploadHandler";
 import FileData from "@/types/FileData";
 import routes from "@/sources/routes";
 import toast from "react-hot-toast";

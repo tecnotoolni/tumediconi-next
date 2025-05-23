@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Option from "@/types/Option";
 import { convertToOptionsFromMetadata } from "@/utils/convertToOptions";
-import { getMetadataByType } from "@/lib/metadataServiceHandler";
+import { getMetadataByType } from "@/lib/private/metadataServiceHandler";
 import { MetadataType } from "@/types/Metadata";
 import { genderOptions } from "@/sources/options";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";

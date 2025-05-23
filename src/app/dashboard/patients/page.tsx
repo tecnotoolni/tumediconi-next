@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import ManagePatientProspect from "@/components/private/forms/patient/ManagePatientProspect";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import { UseAuthStore } from "@/store/useAuthStore";
-import { getPatientsByDoctorAsignment } from "@/lib/patientHandler";
+import { getPatientsByDoctorAsignment } from "@/lib/private/patientHandler";
 import { Patient } from "@/types/Patient";
 import DoctorPatientCard from "@/components/private/cards/DoctorPatientCard";
 import routes from "@/sources/routes";

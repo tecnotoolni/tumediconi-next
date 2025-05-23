@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { redirect, usePathname } from "next/navigation";
 import Link from "next/link";
-import { TbCalendarClock, TbHeartHandshake, TbUserCircle } from "react-icons/tb";
+import { TbCalendarClock, TbFolder, TbHeartHandshake, TbUserCircle } from "react-icons/tb";
 import { IconType } from "react-icons";
 import routes from "@/sources/routes";
 import Avatar from "@/components/common/ui/Avatar";
@@ -41,16 +41,37 @@ export default function DashboardLayout({
       name: "Servicios",
       slug: "services",
       icon: TbHeartHandshake,
+      allowedRoles: [UserRole.doctor],
     },
     {
       name: "Pacientes",
       slug: "patients",
       icon: TbUserCircle,
+      allowedRoles: [UserRole.doctor],
     },
     {
       name: "Citas Programadas",
       slug: "appointments",
       icon: TbCalendarClock,
+      allowedRoles: [UserRole.doctor],
+    },
+    {
+      name: "Mis Citas",
+      slug: "my-appointments",
+      icon: TbCalendarClock,
+      allowedRoles: [UserRole.patient],
+    },
+    {
+      name: "Archivos",
+      slug: "files",
+      icon: TbFolder,
+      allowedRoles: [UserRole.admin, UserRole.doctor]
+    },
+    {
+      name: "Cuentas",
+      slug: "users",
+      icon: TbUserCircle,
+      allowedRoles: [UserRole.admin]
     },
   ];
 
@@ -66,7 +87,7 @@ export default function DashboardLayout({
             const href = `${routes.dashboard}/${menu.slug}`;
             const isActive = pathname.startsWith(href);
             return (
-              <NavigationItem
+              user && menu.allowedRoles.includes(user?.role) && <NavigationItem
                 key={index}
                 icon={menu.icon}
                 name={menu.name}
@@ -105,10 +126,10 @@ const NavigationItem = ({
         active
           ? "bg-primary-700 hover:bg-primary-600 text-white hover:bg-shades-200"
           : "hover:bg-cool-gray-50 bg-white text-primary-800"
-      }  border border-cool-gray-100 active:scale-95 rounded-2xl transition-all flex justify-center items-center text-shades-200 h-16 p-4`}
+      }  border border-cool-gray-100 gap-1 active:scale-95 rounded-xl transition-all flex justify-center items-center text-shades-200 h-16 p-4`}
       aria-label={name}
     >
-      <Icon className="text-[32px]" />
+      <Icon className="text-2xl" />
       <span className="font-medium text-shades-200 text-xl">{name}</span>
     </Link>
   );

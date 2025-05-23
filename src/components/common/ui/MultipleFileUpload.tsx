@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TbCloudUp } from "react-icons/tb";
 import FileData from "@/types/FileData";
-import fileUploadHandler from "@/lib/fileUploadHandler";
+import fileUploadHandler from "@/lib/private/fileUploadHandler";
 import FileCard from "@/components/private/cards/FileCard";
 import FileStatusCard from "@/components/private/cards/FileStatusCard";
 

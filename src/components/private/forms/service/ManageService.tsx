@@ -8,7 +8,7 @@ import LoadingSpinner from "@/components/common/ui/LoadingSpinner";
 import toast from "react-hot-toast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import PriceInput from "@/components/common/ui/PriceInput";
-import { createService, updateService } from "@/lib/serviceHandler";
+import { createService, updateService } from "@/lib/private/serviceHandler";
 
 interface Props {
   errors?: KeyWithStringValue;

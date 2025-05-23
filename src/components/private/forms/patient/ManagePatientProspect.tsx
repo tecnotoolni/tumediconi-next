@@ -10,7 +10,7 @@ import { StatusForm } from "@/types/UI";
 import LoadingSpinner from "@/components/common/ui/LoadingSpinner";
 import toast from "react-hot-toast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { createPatientProspect, updatePatientProspect } from "@/lib/patientHandler";
+import { createPatientProspect, updatePatientProspect } from "@/lib/private/patientHandler";
 
 interface Props {
   errors?: KeyWithStringValue;

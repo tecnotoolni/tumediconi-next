@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import SelectInput from "@/components/common/ui/SelectInput"
 import Option from "@/types/Option"
 import { KeyWithStringValue } from "@/types/KeyWithStringValue"
-import { getCountries, getMunicipaltyByStateCode, getStatesByCountryCode } from "@/lib/geolocalizationHandler"
+import { getCountries, getMunicipaltyByStateCode, getStatesByCountryCode } from "@/lib/private/geolocalizationHandler"
 import { convertToOptionsFromCountries, convertToOptionsFromMunicipalities, convertToOptionsFromStates } from "@/utils/convertToOptions"
 
 interface Props {

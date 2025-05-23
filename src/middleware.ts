@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserToken } from './lib/auth';
+import { getUserToken } from './lib/private/auth';
 import routes from './sources/routes';
 
 export async function middleware(request: NextRequest) {

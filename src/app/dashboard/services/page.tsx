@@ -4,7 +4,7 @@ import Button from "@/components/common/ui/Button";
 import { TbPlus } from "react-icons/tb";
 import { Service } from "@/types/Service";
 import { useCallback, useEffect, useState } from "react";
-import { getServicesByDoctorID, toggleServiceByID } from "@/lib/serviceHandler";
+import { getServicesByDoctorID, toggleServiceByID } from "@/lib/private/serviceHandler";
 import { UseAuthStore } from "@/store/useAuthStore";
 import { Actions } from "@/types/UI";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";

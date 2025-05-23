@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserToken } from '@/lib/auth';
+import { getUserToken } from '@/lib/private/auth';
 import { cookies } from 'next/headers';
 
 interface RequestInitWithDuplex extends RequestInit {

@@ -3,7 +3,7 @@ import LoadingSpinner from "@/components/common/ui/LoadingSpinner";
 import SelectInput from "@/components/common/ui/SelectInput";
 import TextInput from "@/components/common/ui/TextInput";
 import VisualSelect from "@/components/common/ui/VisualSelect";
-import { createContactChannel, updateContactChannel } from "@/lib/contactChannelHandler";
+import { createContactChannel, updateContactChannel } from "@/lib/private/contactChannelHandler";
 import { ContactChannelType } from "@/types/ContactChannel";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import Option from "@/types/Option";

@@ -4,7 +4,7 @@ import MultipleFileUpload from "@/components/common/ui/MultipleFileUpload";
 import RichTextEditor from "@/components/common/ui/RichTextEditor";
 import SelectInput from "@/components/common/ui/SelectInput";
 import TextInput from "@/components/common/ui/TextInput";
-import { createPatientInteraction, updatePatientInteraction } from "@/lib/interactionHandler";
+import { createPatientInteraction, updatePatientInteraction } from "@/lib/private/interactionHandler";
 import FileData from "@/types/FileData";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import Option from "@/types/Option";

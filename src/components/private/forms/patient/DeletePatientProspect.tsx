@@ -1,6 +1,6 @@
 import Button from "@/components/common/ui/Button";
 import LoadingSpinner from "@/components/common/ui/LoadingSpinner";
-import { deletePatientProspect } from "@/lib/patientHandler";
+import { deletePatientProspect } from "@/lib/private/patientHandler";
 import { KeyWithStringValue } from "@/types/KeyWithStringValue";
 import { StatusForm } from "@/types/UI";
 import { getErrorMessage } from "@/utils/getErrorMessage";

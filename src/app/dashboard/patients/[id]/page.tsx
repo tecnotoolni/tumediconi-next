@@ -9,7 +9,7 @@ import DeleteInteraction from "@/components/private/forms/interaction/DeleteInte
 import ManageInteraction from "@/components/private/forms/interaction/ManageInteraction";
 import ContactChannelItem from "@/components/private/items/ContactChannelItem";
 import SubpageTitle from "@/components/private/SubpageTitle";
-import { getPatientInteractionByDoctor } from "@/lib/interactionHandler";
+import { getPatientInteractionByDoctor } from "@/lib/private/interactionHandler";
 import routes from "@/sources/routes";
 import { UseAuthStore } from "@/store/useAuthStore";
 import { ContactChannel } from "@/types/ContactChannel";
