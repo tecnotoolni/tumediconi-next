@@ -11,6 +11,7 @@ interface Props {
     error?: string | null;
     disabled?: boolean;
     required?: boolean;
+    readOnly?: boolean;
 }
 
 export default function TextInput({
@@ -23,6 +24,7 @@ export default function TextInput({
   error,
   disabled,
   required,
+  readOnly,
 }: Props) {
   const [currentValue, setCurrentValue] = useState(value || "");
 
@@ -43,13 +45,14 @@ export default function TextInput({
       <input
         id={name}
         name={name}
+        readOnly={readOnly}
         required={required}
         type={type}
         value={currentValue}
         disabled={disabled}
         onChange={handleChange}
         placeholder={placeholder}
-        className={`p-1.5 bg-shades-100 border disabled:bg-cool-gray-100 disabled:opacity-20 ${
+        className={`p-1.5 bg-shades-100 border disabled:bg-cool-gray-100 read-only:bg-cool-gray-100 read-only:pointer-events-none read-only:opacity-20 disabled:opacity-20 ${
           error ? "border-red-200 bg-red-100 text-red-600" : "border-cool-gray-100"
         } text-gray-700 rounded-lg`}
       />

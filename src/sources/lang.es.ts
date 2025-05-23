@@ -87,6 +87,7 @@ const es = {
     },
     appointment: {
         error: {
+            get_unknown: "Ha ocurrido un error al obtener las citas, por favor intenta nuevamente.",
             unknown: "Ha ocurrido un error al obtener las citas, por favor intenta nuevamente.",
             post_unknown: "Ha ocurrido un error al tratar de crear una nueva cita, por favor intenta nuevamente.",
             post_verify_unknown: "Ha ocurrido un error al verificar la disponibilidad, por favor intenta nuevamente.",
