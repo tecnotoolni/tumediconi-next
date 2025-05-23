@@ -68,7 +68,6 @@ export default function AuthFinish() {
         const birthDate = formData.get("birthDate");
         const municipaltyID = formData.get("municipaltyID");
         const address = formData.get("address");
-        const notes = formData.get("notes");
 
         const data = {
           avatarID,
@@ -80,7 +79,6 @@ export default function AuthFinish() {
           birthDate,
           municipaltyID,
           address,
-          notes
         }
 
         const response = await createPatientProfile({ data })
@@ -118,6 +116,7 @@ export default function AuthFinish() {
         const languages = formData.getAll("languages");
         const businessHours = formData.getAll("business_hours");
         const aproximateAddress = formData.get("aproximateAddress");
+        const notes = formData.get("notes");
   
         const data = {
           avatarID,
@@ -129,7 +128,8 @@ export default function AuthFinish() {
           municipaltyID,
           languages,
           businessHours,
-          aproximateAddress
+          aproximateAddress,
+          notes
         }
 
         const doctor = await createDoctor({ data })

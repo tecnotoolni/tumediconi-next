@@ -5,7 +5,7 @@ import Image from "next/image";
 import { TbCalendar, TbCertificate, TbLanguage, TbMapPin, TbStethoscope } from "react-icons/tb";
 
 interface PageProps {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }
 
 export default async function DoctorPage({ params }: PageProps) {

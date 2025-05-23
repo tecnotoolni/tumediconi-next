@@ -2,6 +2,8 @@ import DoctorCard from "@/components/public/cards/DoctorCard";
 import DoctorPublicHandler from "@/lib/public/doctorHandler";
 import { Doctor } from "@/types/Doctor";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const doctorsResponse = await DoctorPublicHandler.getAll();
   const doctors: Doctor[] = doctorsResponse.data;

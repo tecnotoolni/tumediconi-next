@@ -35,7 +35,7 @@ async function forwardRequest(
   return { backendRes, fullPath };
 }
 
-export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { backendRes } = await forwardRequest('GET', request, (await params).path);
 
   const contentType = backendRes.headers.get('content-type') || 'application/octet-stream';
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
   });
 }
 
-export async function POST(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function POST(request: NextRequest, { params }:{ params: Promise<{ path: string[] }> }) {
   const { backendRes, fullPath } = await forwardRequest('POST', request, (await params).path);
   const res = await backendRes.json();
 
@@ -72,13 +72,13 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
   return NextResponse.json(res);
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { backendRes } = await forwardRequest('PUT', request, (await params).path);
   const res = await backendRes.json();
   return NextResponse.json(res);
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { backendRes } = await forwardRequest('DELETE', request, (await params).path);
   const res = await backendRes.json();
   return NextResponse.json(res);

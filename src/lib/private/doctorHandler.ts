@@ -14,6 +14,7 @@ interface CreateDoctorProps {
         languages: FormDataEntryValue[] | null,
         aproximateAddress: FormDataEntryValue | null,
         businessHours: FormDataEntryValue[] | null
+        notes: FormDataEntryValue | null
     }
 }
 
