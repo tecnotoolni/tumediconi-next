@@ -81,3 +81,30 @@ export async function deletePatientProspect(id: FormDataEntryValue | null) {
 
     return await response.json() as ApiResponse<Patient>;
 }
+
+interface CreatePatientProfileProps {
+    data: {
+        firstName: FormDataEntryValue | null,
+        lastName: FormDataEntryValue | null,
+        address: FormDataEntryValue | null,
+        birthDate: FormDataEntryValue | null,
+        gender: FormDataEntryValue | null,
+        identityCard: FormDataEntryValue | null,
+        municipaltyID: FormDataEntryValue | null,
+        phone: FormDataEntryValue | null,
+        avatarID: FormDataEntryValue | null,
+    }
+}
+
+export async function createPatientProfile({ data } : CreatePatientProfileProps)  {
+
+    const response = await fetch("/api/patients/profile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    return await response.json() as ApiResponse<Patient>;
+}

@@ -44,6 +44,8 @@ export default function GeolocationSelects({ data, setDynamicData, fieldError, o
 
   useEffect(() => {
     const fetchStates = async () => {
+        console.log(options.countries)
+
       if (!data.country) {
         data.country = options.countries[0]?.value;
       };

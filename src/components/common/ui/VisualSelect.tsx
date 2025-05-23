@@ -44,7 +44,7 @@ export default function VisualSelect({inline, name, label, options, onChange, va
             className={`border flex-1 justify-center flex items-center ${inline ? "flex-1 justify-center p-2" : "flex-col p-4"} cursor-pointer transition-all rounded-lg active:scale-95 ${selectedValue === option.value ? 'bg-primary-700 hover:bg-primary-600 text-white' : 'border-cool-gray-100 hover:bg-cool-gray-50 text-primary-700'}`}
           >
             <option.icon strokeWidth={2} />
-            <span className="font-light">{option.label}</span>
+            <span className="font-raleway font-medium">{option.label}</span>
           </button>
         ))}
       </div>

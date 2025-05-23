@@ -3,12 +3,14 @@ import { persist } from 'zustand/middleware';
 import { UserAuthenticated } from '@/types/User';
 import FileData from '@/types/FileData';
 import { Doctor } from '@/types/Doctor';
+import { Patient } from '@/types/Patient';
 
 type AuthState = {
   user: UserAuthenticated | null;
   setUser: (user: UserAuthenticated | null) => void;
   setUserAvatar: (avatar: FileData) => void;
   setUserDoctor: (doctor: Doctor) => void;
+  setUserPatient: (patient: Patient) => void;
 };
 
 export const UseAuthStore = create<AuthState>()(
@@ -26,6 +28,12 @@ export const UseAuthStore = create<AuthState>()(
         user: {
           ...state.user,
           doctor,
+        } as UserAuthenticated,
+      })),
+      setUserPatient: (patient) => set((state) => ({
+        user: {
+          ...state.user,
+          patient,
         } as UserAuthenticated,
       })),
     }),
