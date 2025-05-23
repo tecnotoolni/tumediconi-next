@@ -5,7 +5,7 @@ import { Doctor } from "@/types/Doctor";
 export default class DoctorPublicHandler {
 
     static async getAll() {
-        const response = await fetch("/api/public/doctors", {
+        const response = await fetch(`${process.env.API_URL}/public/doctors`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

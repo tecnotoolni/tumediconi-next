@@ -104,7 +104,12 @@ export default function CreateDoctor({ onLoadingChange, fieldError }: Props) {
 
       <div className="mb-8">
         <h2 className="text-2xl font-semibold text-primary-700 mb-6">Desarrollo Profesional</h2>
-        <div className="flex flex-col gap-4">
+        <TextAreaInput
+          error={fieldsError?.notes}
+          label="Descripción Profesional"
+          name="notes"
+        />
+        <div className="flex flex-col gap-4 mt-4">
           <SelectMultiple
             required
             error={fieldsError?.languages}

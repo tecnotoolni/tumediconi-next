@@ -1,3 +1,4 @@
+import { Location } from "./Geolocalization";
 import { Metadata } from "./Metadata";
 import { Service } from "./Service";
 import Status from "./Status";

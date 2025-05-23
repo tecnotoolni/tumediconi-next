@@ -68,6 +68,7 @@ export default function AuthFinish() {
         const birthDate = formData.get("birthDate");
         const municipaltyID = formData.get("municipaltyID");
         const address = formData.get("address");
+        const notes = formData.get("notes");
 
         const data = {
           avatarID,
@@ -78,7 +79,8 @@ export default function AuthFinish() {
           gender,
           birthDate,
           municipaltyID,
-          address
+          address,
+          notes
         }
 
         const response = await createPatientProfile({ data })
