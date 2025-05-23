@@ -34,4 +34,5 @@ export enum UserRole {
     doctor = "doctor",
     patient = "patient"
 }
+
 export type UserStatus = "active" | "inactive" | "blocked";

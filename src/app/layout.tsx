@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Raleway, Roboto } from "next/font/google";
+import 'react-calendar/dist/Calendar.css';
 import "./globals.css";
 import ToastProvider from "@/components/common/ToastProvider";
 

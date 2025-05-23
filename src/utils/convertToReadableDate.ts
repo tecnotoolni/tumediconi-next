@@ -17,3 +17,10 @@ export function formatDateToISO(dateStr?: string): string {
     if (isNaN(date.getTime())) return "";
     return date.toISOString().slice(0, 10);
 }
+
+export function formatDateToISOWithTime(dateStr?: string): string {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return "";
+    return date.toISOString().slice(0, 19).replace("T", " ");
+}

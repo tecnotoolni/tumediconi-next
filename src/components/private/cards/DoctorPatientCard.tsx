@@ -2,7 +2,7 @@ import Avatar from "@/components/common/ui/Avatar";
 import IconButton from "@/components/common/ui/IconButton";
 import { genders } from "@/sources/options";
 import routes from "@/sources/routes";
-import { Patient, PatientStatus } from "@/types/Patient";
+import { Patient, PatientStatusRead, PatientStatus} from "@/types/Patient";
 import { convertToReadableDate } from "@/utils/convertToReadableDate";
 import Link from "next/link";
 import { TbEdit, TbTrash } from "react-icons/tb";
@@ -24,7 +24,7 @@ export default function DoctorPatientCard({ patient, href, onDelete, onEdit} : P
         deleted: "bg-red-100 text-red-800",
     }
 
-    patient.status = "active"
+    const isPropect = patient.status === PatientStatus.prospect;
 
     return (
         <li className="flex gap-4 items-center">
@@ -49,15 +49,15 @@ export default function DoctorPatientCard({ patient, href, onDelete, onEdit} : P
                     <span>{patient.identityCard}</span>
                 </div>
                 <div className="flex-1 flex justify-center" >
-                    <span className={`py-2 px-4 rounded-full ${statusColor[patient.status]}`}>{PatientStatus[patient.status]}</span>
+                    <span className={`py-2 px-4 rounded-full ${statusColor[patient.status]}`}>{PatientStatusRead[patient.status]}</span>
                 </div>
                 <div className="flex-1 flex justify-center" >
                     <span>{patient.municipality?.name}</span>
                 </div>
             </Link>
-            <div className="flex gap-2">
-                <IconButton icon={TbEdit} onClick={onEdit} />
-                <IconButton icon={TbTrash} onClick={onDelete} />
+            <div className={`flex gap-2 ${isPropect ? "opacity-100" : "opacity-25 pointer-events-none"}`}>
+                <IconButton icon={TbEdit} onClick={isPropect ? onEdit : undefined} />
+                <IconButton icon={TbTrash} onClick={isPropect ? onDelete : undefined} />
             </div>
         </li>
     )

@@ -15,7 +15,7 @@ export default function Button({ className, disabled, color, type, label, onClic
     const definitions = {
         red: "text-red-600 bg-red-100 hover:bg-red-200",
         blue: "text-primary-800 bg-primary-100 hover:bg-primary-200",
-        gray: "text-cool-gray-700 bg-cool-gray-100 hover:bg-cool-gray-200"
+        gray: "text-cool-gray-700 bg-cool-gray-50 hover:bg-cool-gray-100"
     }
 
     return ( 

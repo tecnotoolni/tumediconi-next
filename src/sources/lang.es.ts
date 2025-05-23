@@ -84,6 +84,19 @@ const es = {
             put_unknown: "Ha ocurrido un error al tratar de actualizar el canal de contacto, por favor intenta nuevamente.",
             delete_unknown: "Ha ocurrido un error al tratar de eliminar el canal de contacto, por favor intenta nuevamente.",
         }
+    },
+    appointment: {
+        error: {
+            unknown: "Ha ocurrido un error al obtener las citas, por favor intenta nuevamente.",
+            post_unknown: "Ha ocurrido un error al tratar de crear una nueva cita, por favor intenta nuevamente.",
+            post_verify_unknown: "Ha ocurrido un error al verificar la disponibilidad, por favor intenta nuevamente.",
+            put_unknown: "Ha ocurrido un error al tratar de actualizar la cita, por favor intenta nuevamente.",
+            delete_unknown: "Ha ocurrido un error al tratar de eliminar la cita, por favor intenta nuevamente.",
+        },
+        success: {
+            title: "Cita creada",
+            message: "La cita ha sido creada correctamente.",
+        }
     }
 }
 

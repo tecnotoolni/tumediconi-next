@@ -1,15 +1,15 @@
-import Button from "@/components/common/ui/Button";
+import DoctorServicesClient from "@/components/public/DoctorServicesClient";
 import DoctorPublicHandler from "@/lib/public/doctorHandler";
 import routes from "@/sources/routes";
 import Image from "next/image";
-import { TbCalendar, TbCertificate, TbLanguage, TbMapPin, TbStarFilled, TbStethoscope } from "react-icons/tb";
+import { TbCalendar, TbCertificate, TbLanguage, TbMapPin, TbStethoscope } from "react-icons/tb";
 
 interface PageProps {
     params: { slug: string };
 }
 
 export default async function DoctorPage({ params }: PageProps) {
-    const { slug } = params;
+    const { slug } = await params;
     const doctor = await DoctorPublicHandler.getBySlug(slug);
 
     const languages = doctor.data.metadatas
@@ -69,27 +69,7 @@ export default async function DoctorPage({ params }: PageProps) {
                 </ul>
             </div>
         </article>
-        <article className="flex flex-col gap-2 mt-8">
-            <h2 className="text-2xl font-raleway font-medium text-primary-600">Servicios Disponibles</h2>
-            <ul className="grid grid-cols-4 gap-4">
-                {
-                    doctor.data.services && doctor.data.services.map((service) => (
-                        <li key={service.id} className="p-8 flex flex-col text-white min-h-48 rounded-2xl bg-linear-150 from-primary-700 to-primary-400">
-                            <TbStarFilled className="" />
-                            <h3 className="font-raleway">{service.name}</h3>
-                            <p className="text-sm">{service.description}</p>
-                            <span className="my-3 text-2xl font-raleway">
-                            { service.basePrice != null
-                                    ? new Intl.NumberFormat('es-NI', { style: 'currency', currency: 'NIO' }).format(service.basePrice)
-                                    : "Precio no disponible"
-                            }
-                            </span>
-                            <Button label="Agendar una Cita" color="blue" type="button" className="w-full mt-auto justify-center" /> 
-                        </li>
-                    ))
-                }
-            </ul>
-        </article>
+        {doctor.data.services && <DoctorServicesClient doctorID={doctor.data.id} services={doctor.data.services} />}
         </>
     );
 }

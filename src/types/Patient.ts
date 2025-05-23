@@ -1,7 +1,6 @@
 import { ContactChannel } from "./ContactChannel";
 import { Municipality } from "./Geolocalization";
 import { Interaction } from "./Interaction";
-import Status from "./Status";
 import { User } from "./User";
 
 export enum GenderType {
@@ -19,7 +18,7 @@ export interface Patient {
     phone?: string;
     address?: string;
     municipalityID?: number;
-    status: Status;
+    status: PatientStatus;
     createdAt?: Date;
     updatedAt?: Date;
     removedAt?: Date;
@@ -33,7 +32,15 @@ export interface PatientInteraction {
     interactions: Interaction[]
 }
 
-export const PatientStatus = {
+export enum PatientStatus {
+    prospect = "prospect",
+    active = "active",
+    disabled = "disabled",
+    modified = "modified",
+    deleted = "deleted",
+}
+
+export const PatientStatusRead = {
     prospect: "Prospecto",
     active: "Activo",
     disabled: "Deshabilitado",
