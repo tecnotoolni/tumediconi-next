@@ -62,7 +62,7 @@ export async function POST(request: NextRequest, { params }:{ params: Promise<{ 
   if (fullPath === 'auth/login' && backendRes.ok && res?.data?.token) {
     const cookieStore = await cookies();
     cookieStore.set('token', res.data.token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       path: '/',
       maxAge: 60 * 60 * 24,
